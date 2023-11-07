@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LogIn</title>
+    <link rel="stylesheet" href="styles/styles.css">
+</head>
+<body id="body">
+    <div class = "login">
+        <form id="loginForm">
+            <label for = "userid">Enter UTD-ID:</label>
+            <input type="text" id="userid" name="userid" placeholder="ex: ABC20001">
+        
+            <br>
+        
+            <label for = "password"> Enter Password:</label>
+            <input type="text" id="password" name="password" placeholder="ex: P4ssword@UTD">
+        
+            <br><br>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <div id="rejection" style="display: none;">
+        <h3>INVALID CREDENTIALS</h3>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
