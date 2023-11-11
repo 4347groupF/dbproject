@@ -3,7 +3,7 @@
     background-color: rgb(205, 209, 209);
     position: relative;
 
-    background-image: url('LibraryBackground.JPG');
+    background-image: url('/booksearch/templates/booksearch/styles/LibraryBackground.JPG');
     background-repeat: no-repeat;
     background-size: cover;
     background-attachment: fixed;
@@ -58,4 +58,6 @@
     opacity: 0.92;
     text-emphasis-color:#fff;
 }
+
+
 
