@@ -104,8 +104,8 @@ def login(request):
         # Database configuration
         config = {
             'user': 'library_admin',
-            'password': 'your_password',
-            'host': 'your_host',
+            'password': 'cDavis4347GRP',
+            'host': '159.223.135.139',
             'port': '3306',
             'database': 'LibraryProject',
         }
