@@ -11,3 +11,19 @@ class Book(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class borrower(models.Model):
+    card_id = models.PositiveIntegerField(unique=True, db_column='card_id')
+    ssn = models.TextField(db_column='ssn')
+    address = models.TextField(db_column='address')
+    phone =  models.TextField(db_column='phone')
+    id =  models.TextField(db_column='id')
+    first_name = models.CharField(max_length=50, db_column='first_name')
+    last_name = models.CharField(max_length=50, db_column='last_name')
+    email = models.CharField(max_length=50,db_column='email')
+    city = models.CharField(max_length=50,db_column='city')
+    state = models.CharField(max_length=50, db_column='state')
+
+    def __str__(self):
+        return self.card_id
