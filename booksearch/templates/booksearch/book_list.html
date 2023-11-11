@@ -6,24 +6,64 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Search Results</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .checkout-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 5px 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
     <h1>Search Results</h1>
 
-    <ul>
-        {% for book in books %}
-            <li>
-                ISBN: {{ book.isbn }}<br>
-                Title: {{ book.title }}<br>
-                Pages: {{ book.pages }}<br>
-                <img src="{{ book.cover }}" alt="Book Cover"><br>
-                Author: {{ book.auth_list }}<br>
-                Availability: {% if book.availability %}Available{% else %}Not Available{% endif %}<br>
-            </li>
-        {% empty %}
-            <li>No books found.</li>
-        {% endfor %}
-    </ul>
+    <table>
+        <thead>
+            <tr>
+                <th>ISBN</th>
+                <th>Title</th>
+                <th>Pages</th>
+                <th>Cover</th>
+                <th>Author</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in books %}
+                <tr>
+                    <td>{{ book.isbn }}</td>
+                    <td>{{ book.title }}</td>
+                    <td>{{ book.pages }}</td>
+                    <td><img src="{{ book.cover }}" alt="Book Cover"></td>
+                    <td>{{ book.auth_list }}</td>
+                    <td>
+                        <a href="{% url 'checkout' book.isbn %}" class="checkout-button">Check-out</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6">No books found.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
 </body>
 </html>
