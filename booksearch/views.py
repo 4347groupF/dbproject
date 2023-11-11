@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Book
+from .models import borrower
 import mysql.connector
 
 def home(request):
@@ -92,3 +93,17 @@ def checkout(request, isbn):
     except Book.DoesNotExist:
         # Handle the case where the book with the given ISBN is not found
         return render(request, 'booksearch/checkout_confirmation.html', {'isbn': isbn})
+
+
+# views.py
+def login_view(request):
+    if request.method == 'POST':
+        card_id = request.POST.get('card_id')
+        try:
+            borrower_obj = borrower.objects.get(card_id=card_id)
+            request.session['borrower_id'] = borrower_obj.card_id
+            return redirect('some-success-url')
+        except borrower.DoesNotExist:
+            return render(request, 'login.html', {'error_message': 'Invalid Card ID'})
+
+    return render(request, 'login.html')

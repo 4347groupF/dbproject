@@ -4,23 +4,81 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LogIn</title>
-    <link rel="stylesheet" href="/booksearch/templates/booksearch/styles/styles.css">
+    <style>
+
+#body
+{
+    background-color: rgb(205, 209, 209);
+    position: relative;
+
+    background-image: url('/booksearch/templates/booksearch/LibraryBackground.JPG');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+
+.login
+{
+    width: 15em;
+   
+     /*border: 1px solid #333;
+   box-shadow: 8px 8px 5px #444;*/
+    margin: auto;
+    margin-top: 6em;
+    top: 50%;
+    padding: 8em;
+    background-color: #3c8be6;
+    border-radius: .5em;
+    opacity: 0.85;
+}
+
+.login:hover
+{
+    opacity: 0.92;
+}
+
+.userid
+{
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;  
+
+}
+
+#rejection
+{
+   
+    top: 25%;
+   
+    background-color: red;
+    border-radius: 0.25em;
+    opacity: 0.85;
+
+    text-align: center;
+
+    display: none;
+
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#rejection:hover
+{
+    opacity: 0.92;
+    text-emphasis-color:#fff;
+}
+
+    </style>
 
 </head>
 <body id="body">
     <div class = "login">
-        <form id="loginForm">
-            <label for = "userid">Enter UTD-ID:</label>
-            <input type="text" id="userid" name="userid" placeholder="ex: ABC20001">
-            <br>
-           <br>
-            <button type="submit">Submit</button>
+        <form id="loginForm" method="post" action="{% url 'login' %}">
+            <label for="card_id">Card ID:</label>
+            <input type="text" id="card_id" name="card_id" placeholder="Enter your Card ID" required>
+            <button type="submit">Login</button>
         </form>
-            <h3 id="rejection">INVALID CREDENTIALS</h3>
+        <h3 id="rejection">{{ error_message }}</h3>
     </div>
 
-    
-
-    <script src="/booksearch/templates/booksearch/script.js"></script>
 </body>
 </html>
