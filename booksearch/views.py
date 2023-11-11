@@ -1,25 +1,10 @@
-# booksearch/views.py
-from django.db.models import Q
-from django.views.generic import ListView
+from django.shortcuts import render, redirect
 from .models import Book
-from django.shortcuts import render
 import mysql.connector
 
-# Your existing code for the 'home' view
 def home(request):
     return render(request, 'booksearch/index.html', {})
 
-# Existing 'search_results' view
-'''
-def search_results(request):
-    query = request.GET.get('q')
-    books = []
-    context = {
-        'query': query,
-        'books': books,
-    }
-    return render(request, 'booksearch/book_list.html', context)
-'''
 def search_books(request):
     if request.method == 'GET':
         keyword = request.GET.get('q', '')  # Get the search keyword from the query parameter
@@ -53,7 +38,7 @@ def search_books(request):
                         'cover': cover,
                         'auth_list': auth_list,
                     })
-                
+
                 # Execute author SQL query
                 query = f"SELECT isbn, title, pages, cover, auth_list FROM BOOKS WHERE auth_list LIKE '%{keyword}%'"
                 cursor.execute(query)
@@ -95,19 +80,15 @@ def search_books(request):
             conn.close()
 
     # Handle other cases or errors here
-    return render(request, 'booksearch/book_list.html', {})  # Return an empty context for now
+    return render(request, 'booksearch/book_list.html', {})
 
-# Updated code for the 'BookListView' class
-class BookListView(ListView):
-    model = Book
-    template_name = 'book_list.html'
-    context_object_name = 'BOOKS'
-
-    def get_queryset(self):
-        query = self.request.GET.get('q')
-        if query:
-            return Book.objects.filter(
-                Q(title__icontains=query) |
-                Q(auth_list__icontains=query)
-            )
-        return Book.objects.all()
+def checkout(request, isbn):
+    try:
+        book = Book.objects.get(isbn=isbn)
+        context = {
+            'book': book,
+        }
+        return render(request, 'booksearch/checkout_confirmation.html', context)
+    except Book.DoesNotExist:
+        # Handle the case where the book with the given ISBN is not found
+        return render(request, 'booksearch/checkout_confirmation.html', {'isbn': isbn})

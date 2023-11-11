@@ -4,6 +4,9 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.home, name='index'),  # Homepage using index.html template
-    path('search/', views.search_books, name='search_books'),  # Search results using book_list.html template
+    # Existing URL patterns
+    path('', views.home, name='index'),
+    path('search/', views.search_books, name='search_books'),  # Updated to use search_books view
+    # Define a URL pattern for the 'checkout' view
+    path('checkout/<str:isbn>/', views.checkout, name='checkout'),
 ]
