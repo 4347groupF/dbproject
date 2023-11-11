@@ -96,14 +96,45 @@ def checkout(request, isbn):
 
 
 # views.py
+
 def login_view(request):
     if request.method == 'POST':
         card_id = request.POST.get('card_id')
+
+        # Database configuration
+        config = {
+            'user': 'library_admin',
+            'password': 'your_password',
+            'host': 'your_host',
+            'port': '3306',
+            'database': 'LibraryProject',
+        }
+
         try:
-            borrower_obj = borrower.objects.get(card_id=card_id)
-            request.session['borrower_id'] = borrower_obj.card_id
-            return redirect('some-success-url')
-        except borrower.DoesNotExist:
-            return render(request, 'login.html', {'error_message': 'Invalid Card ID'})
+            conn = mysql.connector.connect(**config)
+            cursor = conn.cursor()
+
+            # Execute SQL query
+            query = f"SELECT card_id FROM borrower WHERE card_id = '{card_id}'"
+            cursor.execute(query)
+            borrower = cursor.fetchone()
+
+            if borrower:
+                # Borrower found, proceed with login
+                request.session['borrower_id'] = card_id
+                return redirect('some-success-url')
+            else:
+                # Borrower not found, return error message
+                return render(request, 'login.html', {'error_message': 'Invalid Card ID'})
+
+        except mysql.connector.Error as e:
+            print(f"Error: {e}")
+            # Handle database connection error
+            return render(request, 'login.html', {'error_message': 'Database error'})
+
+        finally:
+            if conn.is_connected():
+                cursor.close()
+                conn.close()
 
     return render(request, 'login.html')
