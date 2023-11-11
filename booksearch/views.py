@@ -97,7 +97,7 @@ def checkout(request, isbn):
 
 # views.py
 
-def login_view(request):
+def login(request):
     if request.method == 'POST':
         card_id = request.POST.get('card_id')
 
@@ -122,7 +122,7 @@ def login_view(request):
             if borrower:
                 # Borrower found, proceed with login
                 request.session['borrower_id'] = card_id
-                return redirect('some-success-url')
+                return redirect('index')
             else:
                 # Borrower not found, return error message
                 return render(request, 'login.html', {'error_message': 'Invalid Card ID'})

@@ -9,5 +9,5 @@ urlpatterns = [
     path('search/', views.search_books, name='search_books'),  # Updated to use search_books view
     # Define a URL pattern for the 'checkout' view
     path('checkout/<str:isbn>/', views.checkout, name='checkout'),
-    path('login/', views.login_view, name='login'),
+    path('login/', views.login, name='login'),
 ]
