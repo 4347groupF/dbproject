@@ -6,11 +6,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Search</title>
+    <style>
+        /* Centering styles */
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh; /* 100% of the viewport height */
+            margin: 0;
+        }
+
+        /* Additional styles for form and input */
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        input[type="text"] {
+            width: 200%;
+            max-width: 1000px; /* Adjust as needed */
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        button[type="submit"] {
+            padding: 10px 20px;
+            background-color: #007bff; /* Adjust as needed */
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
     <h1>Book Search</h1>
     <form method="get" action="{% url 'search_books' %}">
-        <input type="text" name="q" placeholder="Enter book title or author">
+        <input type="text" name="q" placeholder="Enter book title or author or isbn">
         <button type="submit">Search</button>
     </form>
 </body>
