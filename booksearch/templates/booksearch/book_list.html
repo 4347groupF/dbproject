@@ -1,0 +1,29 @@
+<!-- booksearch/templates/booksearch/book_list.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Search Results</title>
+</head>
+<body>
+    <h1>Search Results</h1>
+
+    <ul>
+        {% for book in books %}
+            <li>
+                ISBN: {{ book.isbn }}<br>
+                Title: {{ book.title }}<br>
+                Pages: {{ book.pages }}<br>
+                <img src="{{ book.cover }}" alt="Book Cover"><br>
+                Author: {{ book.auth_list }}<br>
+                Availability: {% if book.availability %}Available{% else %}Not Available{% endif %}<br>
+            </li>
+        {% empty %}
+            <li>No books found.</li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>
