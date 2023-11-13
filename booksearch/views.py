@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Book
-from .models import borrower
+from .models import Borrower
 import mysql.connector
 
 def home(request):
@@ -25,45 +25,22 @@ def search_books(request):
             if conn.is_connected():
                 cursor = conn.cursor()
 
-                # Execute title SQL query
-                query = f"SELECT isbn, title, pages, cover, auth_list FROM BOOKS WHERE title LIKE '%{keyword}%'"
-                cursor.execute(query)
+                # Execute title / isbn / author SQL query
+                query = f"""SELECT isbn, title, pages, cover, auth_list, available
+                            FROM BOOKS 
+                            WHERE title LIKE %(search)s OR isbn LIKE %(search)s or auth_list LIKE %(search)s"""
+                cursor.execute(query, {"search": f"%{keyword}%"})
 
                 # Fetch results
                 books = []
-                for (isbn, title, pages, cover, auth_list) in cursor:
+                for (isbn, title, pages, cover, auth_list, available) in cursor:
                     books.append({
                         'isbn': isbn,
                         'title': title,
                         'pages': pages,
                         'cover': cover,
                         'auth_list': auth_list,
-                    })
-
-                # Execute author SQL query
-                query = f"SELECT isbn, title, pages, cover, auth_list FROM BOOKS WHERE auth_list LIKE '%{keyword}%'"
-                cursor.execute(query)
-
-                for (isbn, title, pages, cover, auth_list) in cursor:
-                    books.append({
-                        'isbn': isbn,
-                        'title': title,
-                        'pages': pages,
-                        'cover': cover,
-                        'auth_list': auth_list,
-                    })
-
-                # Execute ISBN SQL query
-                query = f"SELECT isbn, title, pages, cover, auth_list FROM BOOKS WHERE isbn LIKE '%{keyword}%'"
-                cursor.execute(query)
-
-                for (isbn, title, pages, cover, auth_list) in cursor:
-                    books.append({
-                        'isbn': isbn,
-                        'title': title,
-                        'pages': pages,
-                        'cover': cover,
-                        'auth_list': auth_list,
+                        'available': bool(available),
                     })
 
                 context = {
@@ -71,7 +48,7 @@ def search_books(request):
                     'books': books,
                 }
                 return render(request, 'booksearch/book_list.html', context)
-
+ 
         except mysql.connector.Error as e:
             print(f"Error: {e}")
 
@@ -82,6 +59,9 @@ def search_books(request):
 
     # Handle other cases or errors here
     return render(request, 'booksearch/book_list.html', {})
+
+def loan_search():
+    pass
 
 def checkout(request, isbn):
     try:

@@ -54,7 +54,11 @@
                     <td><img src="{{ book.cover }}" alt="Book Cover"></td>
                     <td>{{ book.auth_list }}</td>
                     <td>
-                        <a href="{% url 'checkout' book.isbn %}" class="checkout-button">Check-out</a>
+                        {% if book.available %}
+                            <a href="{% url 'checkout' book.isbn %}" class="checkout-button">Check-out</a>
+                        {% else %}
+                            Book not available
+                        {% endif %}
                     </td>
                 </tr>
             {% empty %}

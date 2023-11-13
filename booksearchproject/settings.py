@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "booksearch.apps.BooksearchConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -78,10 +79,10 @@ WSGI_APPLICATION = "booksearchproject.wsgi.application"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'your_database_name',
-        'USER': 'your_mysql_username',
-        'PASSWORD': 'your_mysql_password',
-        'HOST': 'localhost',  # Change to your MySQL server host if needed
+        'NAME': 'LibraryProject',
+        'USER': 'library_admin',
+        'PASSWORD': 'cDavis4347GRP',
+        'HOST': '159.223.135.139',  # Change to your MySQL server host if needed
         'PORT': '3306',       # Change to your MySQL server port if needed
     }
 }
