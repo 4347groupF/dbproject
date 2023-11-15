@@ -36,3 +36,18 @@ class Borrower(models.Model):
 
     def __str__(self):
         return self.card_id
+
+class BookLoans(models.Model):
+    loan_id = models.AutoField(primary_key=True)
+    isbn = models.ForeignKey(Book, models.DO_NOTHING, db_column='isbn', blank=True, null=True)
+    card = models.ForeignKey(Borrower, models.DO_NOTHING, blank=True, null=True)
+    date_out = models.DateField(blank=True, null=True)
+    due_date = models.DateField(blank=True, null=True)
+    date_in = models.DateField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'BOOK_LOANS'
+    
+    def __str__(self):
+        return self.loan_id

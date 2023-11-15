@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
-from .models import Book
-from .models import Borrower
-import mysql.connector
+from django.http import JsonResponse
+from django.db import connection
+from .models import *
 
 def home(request):
     return render(request, 'booksearch/index.html', {})
@@ -9,22 +9,8 @@ def home(request):
 def search_books(request):
     if request.method == 'GET':
         keyword = request.GET.get('q', '')  # Get the search keyword from the query parameter
-
-        # Database configuration
-        config = {
-            'user': 'library_admin',
-            'password': 'cDavis4347GRP',
-            'host': '159.223.135.139',
-            'port': '3306',
-            'database': 'LibraryProject',
-        }
-
         try:
-            conn = mysql.connector.connect(**config)
-
-            if conn.is_connected():
-                cursor = conn.cursor()
-
+            with connection.cursor() as cursor:
                 # Execute title / isbn / author SQL query
                 query = f"""SELECT isbn, title, pages, cover, auth_list, available
                             FROM BOOKS 
@@ -48,20 +34,42 @@ def search_books(request):
                     'books': books,
                 }
                 return render(request, 'booksearch/book_list.html', context)
- 
-        except mysql.connector.Error as e:
-            print(f"Error: {e}")
 
-        finally:
-            # Close cursor and connection
-            cursor.close()
-            conn.close()
+        except Exception as e:
+            print(f"Error: {e}")
 
     # Handle other cases or errors here
     return render(request, 'booksearch/book_list.html', {})
 
-def loan_search():
-    pass
+# TODO convert or connect with another function that will render the page
+# Currently just returns the JSON response
+def loan_search(request):
+    if request.method == 'GET':
+        keyword = request.GET.get('q', '') 
+
+        loans = []
+        for p in BookLoans.objects.raw(
+            f"""SELECT first_name, last_name, loan_id, b.card_id, date_out, due_date
+            FROM BOOK_LOANS as bl
+            INNER JOIN BORROWERS as b
+            ON bl.card_id = b.card_id
+            WHERE first_name LIKE %(search)s OR last_name LIKE %(search)s OR isbn LIKE %(search)s or b.card_id LIKE %(search)s""",
+            {"search": f"%{keyword}%"}
+        ):
+            loans.append({
+                'loan_id': p.loan_id,
+                'first_name': p.first_name,
+                'last_name': p.last_name,
+                'card_id': p.card_id,
+                'date_out': p.date_out,
+                'due_date': p.due_date,
+            })
+            
+        context = {
+            'query': keyword,
+            'loans': loans,
+        }
+        return JsonResponse(context)
 
 def checkout(request, isbn):
     try:
@@ -74,47 +82,29 @@ def checkout(request, isbn):
         # Handle the case where the book with the given ISBN is not found
         return render(request, 'booksearch/checkout_confirmation.html', {'isbn': isbn})
 
-
 # views.py
 
 def login(request):
     if request.method == 'POST':
         card_id = request.POST.get('card_id')
-
-        # Database configuration
-        config = {
-            'user': 'library_admin',
-            'password': 'cDavis4347GRP',
-            'host': '159.223.135.139',
-            'port': '3306',
-            'database': 'LibraryProject',
-        }
-
         try:
-            conn = mysql.connector.connect(**config)
-            cursor = conn.cursor()
+            with connection.cursor() as cursor:
+                # Execute SQL query
+                query = f"SELECT card_id FROM borrower WHERE card_id = '{card_id}'"
+                cursor.execute(query)
+                borrower = cursor.fetchone()
 
-            # Execute SQL query
-            query = f"SELECT card_id FROM borrower WHERE card_id = '{card_id}'"
-            cursor.execute(query)
-            borrower = cursor.fetchone()
+                if borrower:
+                    # Borrower found, proceed with login
+                    request.session['borrower_id'] = card_id
+                    return redirect('index')
+                else:
+                    # Borrower not found, return error message
+                    return render(request, 'login.html', {'error_message': 'Invalid Card ID'})
 
-            if borrower:
-                # Borrower found, proceed with login
-                request.session['borrower_id'] = card_id
-                return redirect('index')
-            else:
-                # Borrower not found, return error message
-                return render(request, 'login.html', {'error_message': 'Invalid Card ID'})
-
-        except mysql.connector.Error as e:
+        except Exception as e:
             print(f"Error: {e}")
             # Handle database connection error
             return render(request, 'login.html', {'error_message': 'Database error'})
-
-        finally:
-            if conn.is_connected():
-                cursor.close()
-                conn.close()
 
     return render(request, 'login.html')
