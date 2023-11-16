@@ -72,12 +72,13 @@
 </head>
 <body id="body">
     <div class = "login">
-        <form id="loginForm" method="post" action="{% url 'login' %}">
+        <form id="loginForm" method="post" action="{% url 'login_validation' %}">
             {% csrf_token %}
             <label for="card_id">Card ID:</label>
             <input type="text" id="card_id" name="card_id" placeholder="Enter your Card ID" required>
             <button type="submit">Login</button>
         </form>
+        
         <h3 id="rejection">{{ error_message }}</h3>
     </div>
 
