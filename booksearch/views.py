@@ -83,14 +83,19 @@ def checkout(request, isbn):
         return render(request, 'booksearch/checkout_confirmation.html', {'isbn': isbn})
 
 # views.py
+def login_page(request):
+    return render(request, "booksearch/login.html", {})
 
-def login(request):
+def login_page_fail(request):
+    return render(request, "booksearch/login_fail.html", {})
+
+def login_validation(request):
     if request.method == 'POST':
         card_id = request.POST.get('card_id')
         try:
             with connection.cursor() as cursor:
                 # Execute SQL query
-                query = f"SELECT card_id FROM borrower WHERE card_id = '{card_id}'"
+                query = f"SELECT card_id FROM BORROWERS WHERE card_id = '{card_id}'"
                 cursor.execute(query)
                 borrower = cursor.fetchone()
 
@@ -100,7 +105,7 @@ def login(request):
                     return redirect('index')
                 else:
                     # Borrower not found, return error message
-                    return render(request, 'login.html', {'error_message': 'Invalid Card ID'})
+                    return render(request, 'booksearch/login_fail.html', {})
 
         except Exception as e:
             print(f"Error: {e}")
