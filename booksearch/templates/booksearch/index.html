@@ -45,6 +45,12 @@
     </style>
 </head>
 <body>
+    <nav>
+        <ul>
+            <li><a href="#">Fines</a></li>
+            <li><a href="#">User ID: {{ request.session.borrower_id }}</a></li>
+        </ul>
+    </nav>
     <h1>Book Search</h1>
     <form method="get" action="{% url 'search_books' %}">
         <input type="text" name="q" placeholder="Enter book title or author or isbn">
