@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.db import connection
@@ -71,11 +73,53 @@ def loan_search(request):
         }
         return JsonResponse(context)
 
+# TODO display confirmation page
+def checkin(request, isbn):
+    try:
+        book = Book.objects.get(isbn=isbn)
+        book.available = 0
+
+        loan = BookLoans.objects.get(isbn=isbn, date_in=None)
+        loan.date_in = datetime.today().date()
+
+        book.save()
+        loan.save()
+    except Book.DoesNotExist:
+        # TODO show error response
+        ...
+
 def checkout(request, isbn):
     try:
         book = Book.objects.get(isbn=isbn)
+
+        borrower = Borrower.objects.get(card_id=request.session.get('borrower_id', None))
+        if borrower is None:
+            # no user is logged in, fail request
+            return 
+        
+        # Check other conditions
+        if book.available == 0:
+            e = {
+                "error_message": f"Sorry, this book has already been checked out and is currently not available. Try again at another time."
+            }
+            return render(request, 'booksearch/checkout_failure.html', e)
+    
+        if (c := BookLoans.objects.filter(card=borrower, date_in=None).count()) >= 3:
+            e = {
+                "error_message": f"Sorry, you have {c} books checked out already. The limit for concurrent checkouts is 3. Please return some books to borrow additional ones."
+            }
+            return render(request, 'booksearch/checkout_failure.html', e)
+
+        # Passed conditions
+        book.available = 0
+        book.save()
+
+        loan = BookLoans.objects.create(card=borrower, isbn=book)
+        print(loan.loan_id)
+
         context = {
             'book': book,
+            'due_date': loan.due_date
         }
         return render(request, 'booksearch/checkout_confirmation.html', context)
     except Book.DoesNotExist:

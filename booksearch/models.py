@@ -1,4 +1,5 @@
 # booksearch/models.py
+from datetime import datetime, timedelta
 
 from django.db import models
 
@@ -35,14 +36,14 @@ class Borrower(models.Model):
         db_table = 'BORROWERS'
 
     def __str__(self):
-        return self.card_id
+        return str(self.card_id)
 
 class BookLoans(models.Model):
     loan_id = models.AutoField(primary_key=True)
-    isbn = models.ForeignKey(Book, models.DO_NOTHING, db_column='isbn', blank=True, null=True)
-    card = models.ForeignKey(Borrower, models.DO_NOTHING, blank=True, null=True)
-    date_out = models.DateField(blank=True, null=True)
-    due_date = models.DateField(blank=True, null=True)
+    isbn = models.ForeignKey(Book, models.DO_NOTHING, db_column='isbn', null=True)
+    card = models.ForeignKey(Borrower, models.DO_NOTHING, null=True)
+    date_out = models.DateField(default=datetime.today().date())
+    due_date = models.DateField(default=datetime.today().date() + timedelta(days=14))
     date_in = models.DateField(blank=True, null=True)
 
     class Meta:
@@ -50,4 +51,4 @@ class BookLoans(models.Model):
         db_table = 'BOOK_LOANS'
     
     def __str__(self):
-        return self.loan_id
+        return str(self.loan_id)

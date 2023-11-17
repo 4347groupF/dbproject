@@ -13,4 +13,5 @@ urlpatterns = [
     path('loans/', views.loan_search, name='loan_search'),
     # Define a URL pattern for the 'checkout' view
     path('checkout/<str:isbn>/', views.checkout, name='checkout'),
+    path('checkin/<str:isbn>/', views.checkin, name='checkin'),
 ]
