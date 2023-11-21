@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.db import connection
 from .models import *
+from .forms import *
 
 def home(request):
     return render(request, 'booksearch/index.html', {})
@@ -125,8 +126,29 @@ def checkout(request, isbn):
     except Book.DoesNotExist:
         # Handle the case where the book with the given ISBN is not found
         return render(request, 'booksearch/checkout_confirmation.html', {'isbn': isbn})
+    
+def signup(request):
+    if request.method == "POST":
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            borrower = Borrower(
+                first_name=form.cleaned_data["first_name"],
+                last_name=form.cleaned_data["last_name"],
+                ssn=form.cleaned_data["ssn"],
+                phone=form.cleaned_data["phone"],
+                email=form.cleaned_data["email"],
+                address=form.cleaned_data["address"],
+                state=form.cleaned_data["state"],
+                city=form.cleaned_data["city"]
+            )
 
-# views.py
+            borrower.save()
+            print(f"inserted successfully, id {borrower.card_id}")
+            return render(request, "booksearch/signup_success.html", {"id": borrower.card_id})
+    else:
+        form = SignUpForm()
+    return render(request, "booksearch/signup.html", {"form": form})
+
 def login_page(request):
     return render(request, "booksearch/login.html", {})
 
