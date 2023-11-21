@@ -4,7 +4,7 @@
 INSERT INTO FINES (loan_id, fine_amt)
 SELECT loan_id, 0.25 * DATEDIFF(date_in, due_date) as fine
 FROM BOOK_LOANS 
-WHERE date_in > due_date
+WHERE date_in > due_date AND paid = 0
 ON DUPLICATE KEY UPDATE
 fine_amt = 0.25 * DATEDIFF(date_in, due_date);
 
@@ -13,6 +13,6 @@ fine_amt = 0.25 * DATEDIFF(date_in, due_date);
 INSERT INTO FINES (loan_id, fine_amt)
 SELECT loan_id, 0.25 * DATEDIFF(CURDATE(), due_date) as fine
 FROM BOOK_LOANS 
-WHERE date_in IS NULL AND CURDATE() > due_date
+WHERE date_in IS NULL AND CURDATE() > due_date AND paid = 0
 ON DUPLICATE KEY UPDATE
 fine_amt = 0.25 * DATEDIFF(CURDATE(), due_date);
