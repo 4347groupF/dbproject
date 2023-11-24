@@ -1,5 +1,4 @@
 from datetime import datetime
-
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.db import connection
@@ -49,7 +48,6 @@ def search_books(request):
 def loan_search(request):
     if request.method == 'GET':
         keyword = request.GET.get('q', '') 
-
         loans = []
         for p in BookLoans.objects.raw(
             f"""SELECT first_name, last_name, loan_id, b.card_id, date_out, due_date
@@ -73,61 +71,34 @@ def loan_search(request):
             'loans': loans,
         }
         return JsonResponse(context)
-
-# TODO display confirmation page
 def checkin(request, isbn):
     try:
         book = Book.objects.get(isbn=isbn)
         book.available = 0
 
-        loan = BookLoans.objects.get(isbn=isbn, date_in=None)
+        loan = BookLoans.objects.get(isbn=isbn, date_in = None)
         loan.date_in = datetime.today().date()
 
         book.save()
         loan.save()
     except Book.DoesNotExist:
-        # TODO show error response
+        #show error messsage
         ...
+
+
 
 def checkout(request, isbn):
     try:
         book = Book.objects.get(isbn=isbn)
-
-        borrower = Borrower.objects.get(card_id=request.session.get('borrower_id', None))
-        if borrower is None:
-            # no user is logged in, fail request
-            return 
-        
-        # Check other conditions
-        if book.available == 0:
-            e = {
-                "error_message": f"Sorry, this book has already been checked out and is currently not available. Try again at another time."
-            }
-            return render(request, 'booksearch/checkout_failure.html', e)
-    
-        if (c := BookLoans.objects.filter(card=borrower, date_in=None).count()) >= 3:
-            e = {
-                "error_message": f"Sorry, you have {c} books checked out already. The limit for concurrent checkouts is 3. Please return some books to borrow additional ones."
-            }
-            return render(request, 'booksearch/checkout_failure.html', e)
-
-        # Passed conditions
-        book.available = 0
-        book.save()
-
-        loan = BookLoans.objects.create(card=borrower, isbn=book)
-        print(loan.loan_id)
-
         context = {
             'book': book,
-            'due_date': loan.due_date
         }
         return render(request, 'booksearch/checkout_confirmation.html', context)
     except Book.DoesNotExist:
         # Handle the case where the book with the given ISBN is not found
         return render(request, 'booksearch/checkout_confirmation.html', {'isbn': isbn})
-    
-def signup(request):
+
+def signup_page(request):
     if request.method == "POST":
         form = SignUpForm(request.POST)
         if form.is_valid():
@@ -141,13 +112,13 @@ def signup(request):
                 state=form.cleaned_data["state"],
                 city=form.cleaned_data["city"]
             )
-
             borrower.save()
             print(f"inserted successfully, id {borrower.card_id}")
             return render(request, "booksearch/signup_success.html", {"id": borrower.card_id})
     else:
         form = SignUpForm()
     return render(request, "booksearch/signup.html", {"form": form})
+
 
 def login_page(request):
     return render(request, "booksearch/login.html", {})
@@ -179,3 +150,18 @@ def login_validation(request):
             return render(request, 'login.html', {'error_message': 'Database error'})
 
     return render(request, 'login.html')
+
+def profile_page(request):
+    card_id = request.session.get('borrower_id')
+    if card_id:
+        user = Borrower.objects.get(card_id=card_id)
+        book_loans = BookLoans.objects.filter(card_id=card_id)
+        context = {
+            'user_data': {
+                'borrower_id': user.card_id,
+                'fines': [],
+                'checked_out_books': book_loans,
+            }
+        }
+        return render(request, 'booksearch/profile.html', context)
+    return render(request, 'booksearch/login.html')
