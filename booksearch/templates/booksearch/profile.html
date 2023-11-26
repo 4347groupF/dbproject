@@ -6,11 +6,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile</title>
+    <style>
+        body
+        {
+            background-color: beige;
+        }
+        .userInfo
+        {
+            border-style: groove;
+            display: flex;
+          justify-content: space-between;
+       padding-left:2em;
+        }
+       #usr
+       {
+        padding-right:8em;
+        height:300px;
+        width:300px;
+        padding-top: 2em;
+        border-radius: 50%;
+       }
+       #returnbut
+       {
+        padding-top: 2em;
+        margin-left: 50em;
+       }
+       #but
+       {
+        height: 3em;
+        font-size: larger;
+        background-color: #69bcff;
+    }
+    </style>
 </head>
 <body>
     <h1>User Profile</h1>
-
-    <div>
+    <br>
+    <div class="userInfo">
+        <div>
         <h2>User Information</h2>
         <p><strong>User ID:</strong> {{ user_data.borrower_id }}</p>
         <p><strong>First Name:</strong> {{ user_data.first_name }}</p>
@@ -23,7 +56,10 @@
         <p><strong>State:</strong> {{ user_data.state }}</p>
         <p><strong>Total Fines:</strong> ${{ user_data.total_fines|floatformat:2 }}</p>
     </div>
-
+        <br>
+        <img id="usr" src="user.png" alt="user">
+    </div>
+    
     <div>
         <h2>Checked-Out Books</h2>
         <style>
@@ -69,14 +105,16 @@
                     </tr>
                 {% empty %}
                     <tr>
-                        <td colspan="6">No books found.</td>
+                        <td style="background-color: beige;" coSlspan="6">No books found.</td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
     <form method="get" action="{% url 'index' %}">
-        <button type="submit">Return to Book Search</button>
+        <div id="returnbut">
+        <button id="but" type="submit">Return to Book Search</button>
+    </div>
     </form>
     <!-- Add more sections as needed for additional user information -->
 
