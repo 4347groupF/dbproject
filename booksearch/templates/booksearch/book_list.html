@@ -64,7 +64,7 @@
 <body>
     <nav>
         <ul>
-            <li><a href="{% url 'login_page' %}"> Return to Login</a></li>
+            <li><a href="{% url 'index' %}"> Return to Book Search</a></li>
             <li>User ID: {{ request.session.borrower_id }}</li>
             <li><a href="{% url 'profile_page' %}">Profile</a></li>
         </ul>
