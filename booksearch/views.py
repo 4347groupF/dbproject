@@ -44,50 +44,60 @@ def search_books(request):
     # Handle other cases or errors here
     return render(request, 'booksearch/book_list.html', {})
 
-# TODO convert or connect with another function that will render the page
-# Currently just returns the JSON response
-def loan_search(request):
+def loans(request):
     if request.method == 'GET':
         keyword = request.GET.get('q', '') 
-
         loans = []
-        for p in BookLoans.objects.raw(
-            f"""SELECT first_name, last_name, loan_id, b.card_id, date_out, due_date
-            FROM BOOK_LOANS as bl
-            INNER JOIN BORROWERS as b
-            ON bl.card_id = b.card_id
-            WHERE first_name LIKE %(search)s OR last_name LIKE %(search)s OR isbn LIKE %(search)s or b.card_id LIKE %(search)s""",
-            {"search": f"%{keyword}%"}
-        ):
-            loans.append({
-                'loan_id': p.loan_id,
-                'first_name': p.first_name,
-                'last_name': p.last_name,
-                'card_id': p.card_id,
-                'date_out': p.date_out,
-                'due_date': p.due_date,
-            })
+        if keyword:
+            for p in BookLoans.objects.raw(
+                f"""SELECT isbn, first_name, last_name, loan_id, b.card_id, date_out, due_date
+                FROM BOOK_LOANS as bl
+                INNER JOIN BORROWERS as b
+                ON bl.card_id = b.card_id
+                WHERE first_name LIKE %(search)s OR last_name LIKE %(search)s OR isbn LIKE %(search)s or b.card_id LIKE %(search)s""",
+                {"search": f"%{keyword}%"}
+            ):
+                loans.append({
+                    'loan_id': p.loan_id,
+                    'first_name': p.first_name,
+                    'last_name': p.last_name,
+                    'card_id': p.card_id,
+                    'date_out': p.date_out,
+                    'due_date': p.due_date,
+                    'book_cover': p.isbn.cover,
+                    'auth_list': p.isbn.auth_list,
+                    'title': p.isbn.title,
+                    'isbn': p.isbn.isbn
+                })
             
         context = {
             'query': keyword,
             'loans': loans,
         }
-        return JsonResponse(context)
+        return render(request, 'booksearch/view_loans.html', context)
+    elif request.method == 'POST':
+        loan_list = request.POST.getlist('boxes')
 
-# TODO display confirmation page
-def checkin(request, isbn):
-    try:
-        book = Book.objects.get(isbn=isbn)
-        book.available = 0
+        checked_in = []
+        for lid in loan_list:
+            loan = BookLoans.objects.get(loan_id=lid)
+            loan.date_in = datetime.now().date()
+            loan.save()
 
-        loan = BookLoans.objects.get(isbn=isbn, date_in=None)
-        loan.date_in = datetime.today().date()
+            loan.isbn.available = 1
+            loan.isbn.save()
 
-        book.save()
-        loan.save()
-    except Book.DoesNotExist:
-        # TODO show error response
-        ...
+            checked_in.append({
+                'isbn': loan.isbn.isbn,
+                'book_cover': loan.isbn.cover,
+                'auth_list': loan.isbn.auth_list,
+                'title': loan.isbn.title,
+            })
+
+        context = {
+            'books': checked_in,
+        }
+        return render(request, 'booksearch/checkin_confirmation.html', context)
 
 def checkout(request, isbn):
     try:
@@ -179,3 +189,18 @@ def login_validation(request):
             return render(request, 'login.html', {'error_message': 'Database error'})
 
     return render(request, 'login.html')
+
+def profile_page(request):
+    card_id = request.session.get('borrower_id')
+    if card_id:
+        user = Borrower.objects.get(card_id=card_id)
+        book_loans = BookLoans.objects.filter(card_id=card_id)
+        context = {
+            'user_data': {
+                'borrower_id': user.card_id,
+                'fines': [],
+                'checked_out_books': book_loans,
+            }
+        }
+        return render(request, 'booksearch/profile.html', context)
+    return render(request, 'booksearch/login.html')

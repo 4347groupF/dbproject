@@ -11,8 +11,7 @@ urlpatterns = [
     path('login_fail/',views.login_page_fail, name='login_page_fail'),
     path('signup/',views.signup, name='signup'),
     path('search/', views.search_books, name='search_books'),  
-    path('loans/', views.loan_search, name='loan_search'),
+    path('loans/', views.loans, name='loan_search'),
     # Define a URL pattern for the 'checkout' view
     path('checkout/<str:isbn>/', views.checkout, name='checkout'),
-    path('checkin/<str:isbn>/', views.checkin, name='checkin'),
 ]

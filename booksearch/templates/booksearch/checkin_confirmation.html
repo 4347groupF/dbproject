@@ -1,0 +1,23 @@
+<!-- booksearch/templates/booksearch/checkout_confirmation.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkin Confirmation</title>
+</head>
+<body>
+    <h1>Checkin Confirmation</h1>
+    <p>The following books have successfully been checked in:</p>
+    {% for book in books %}
+    <ul>
+        <li>
+            ISBN: {{ book.isbn }}<br>
+            Title: {{ book.title }}<br>
+            Author: {{ book.auth_list }}<br>
+        </li>
+    </ul>
+    {% endfor %}
+</body>
+</html>
