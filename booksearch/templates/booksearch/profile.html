@@ -1,15 +1,16 @@
 <!-- booksearch/templates/booksearch/profile.html -->
-
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile</title>
+    <script src="{% static 'booksearch/menu.js' %}"></script>
     <style>
         body
         {
-            background-color: beige;
+            background-color: white;
         }
         .userInfo
         {
@@ -29,19 +30,83 @@
        #returnbut
        {
         padding-top: 2em;
-        margin-left: 50em;
        }
        #but
        {
         height: 3em;
         font-size: larger;
         background-color: #69bcff;
-    }
+        border-radius: 8px;
+        }
+        #menu-icon {
+        position: absolute;
+        top: 20px; /* Adjust the top position as needed */
+        right: 10px; /* Adjust the right position as needed */
+        font-size: 20px; /* Adjust the font size as needed */
+        cursor: pointer;
+        background-color: white; /* Add a white background color */
+        padding: 8px; /* Add padding to create a rectangular shape */
+        border-radius: 4px; /* Add border-radius for rounded corners */
+        border: 1px solid #ccc;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        font-family: Arial, sans-serif;
+        }
+
+
+        /* Style for the menu list */
+        #menu-list {
+        position: fixed;
+        top: 10px; /* Adjust the top value as needed */
+        right: 10px; /* Adjust the right value as needed */
+        background-color: #fff;
+        border-radius: 4px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        display: none;
+        font-family: Arial, sans-serif;
+        }
+
+        /* Style for individual menu items */
+        /* Style for the menu list */
+        #menu-list {
+        display: none;
+        position: absolute;
+        top: 0; /* Adjust this if needed */
+        right: 0; /* Adjust this if needed */
+        background-color: #ffffff;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        z-index: 1;
+        padding: 10px;
+        min-width: 150px; /* Adjust this to your desired width */
+        }
+
+        /* Style for individual menu items (links) */
+        #menu-list a {
+        display: block;
+        padding: 10px;
+        text-decoration: none;
+        color: #333;
+        }
+
+        #menu-list a:hover {
+        background-color: #f4f4f4;
+        }
+        
     </style>
 </head>
 <body>
     <h1>User Profile</h1>
     <br>
+    <div id="menu-icon">☰MENU</div>
+    <div id="menu-list">
+        <a href="{% url 'login_page' %}">Log In</a>
+        <a href="{% url 'signup_page' %}">Sign Up</a>
+        <a href="{% url 'loan_search' %}">Librarian Menu</a>
+        <a href="{% url 'index' %}">Book Search</a>
+        <a href="{% url 'profile_page' %}">Profile</a>
+    <!-- Your menu items go here -->
+    </div>
     <div class="userInfo">
         <div>
         <h2>User Information</h2>
@@ -57,7 +122,7 @@
         <p><strong>Total Fines:</strong> ${{ user_data.total_fines|floatformat:2 }}</p>
     </div>
         <br>
-        <img id="usr" src="user.png" alt="user">
+        <img id="usr" src="{% static 'booksearch/user.png' %}" alt="user">
     </div>
     
     <div>
@@ -113,7 +178,7 @@
     </div>
     <form method="get" action="{% url 'index' %}">
         <div id="returnbut">
-        <button id="but" type="submit">Return to Book Search</button>
+        <button id="but" type="submit">Return</button>
     </div>
     </form>
     <!-- Add more sections as needed for additional user information -->
