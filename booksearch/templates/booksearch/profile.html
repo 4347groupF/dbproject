@@ -13,7 +13,15 @@
     <div>
         <h2>User Information</h2>
         <p><strong>User ID:</strong> {{ user_data.borrower_id }}</p>
-        <p><strong>Fines:</strong> {{ user_data.fines }}</p>
+        <p><strong>First Name:</strong> {{ user_data.first_name }}</p>
+        <p><strong>Last Name:</strong> {{ user_data.last_name }}</p>
+        <p><strong>SSN:</strong> {{ user_data.ssn }}</p>
+        <p><strong>Phone Number:</strong> {{ user_data.phone }}</p>
+        <p><strong>Email:</strong> {{ user_data.email }}</p>
+        <p><strong>Address:</strong> {{ user_data.address }}</p>
+        <p><strong>City:</strong> {{ user_data.city }}</p>
+        <p><strong>State:</strong> {{ user_data.state }}</p>
+        <p><strong>Total Fines:</strong> ${{ user_data.total_fines|floatformat:2 }}</p>
     </div>
 
     <div>
@@ -45,7 +53,7 @@
         <table>
             <thead>
                 <tr>
-                    <th>TITLE</th>
+                    <th>ISBN</th>
                     <th>DATE OUT</th>
                     <th>DUE DATE</th>
                     <th>DATE IN</th>
@@ -54,7 +62,7 @@
             <tbody>
                 {% for loan in user_data.checked_out_books %}
                     <tr>
-                        <td>{{ loan.isbn }}</td>
+                        <td>{{ loan.isbn.isbn }}</td>
                         <td>{{ loan.date_out }}</td>
                         <td>{{ loan.due_date }}</td>
                         <td>{{ loan.date_in }}</td>
@@ -67,7 +75,9 @@
             </tbody>
         </table>
     </div>
-
+    <form method="get" action="{% url 'index' %}">
+        <button type="submit">Return to Book Search</button>
+    </form>
     <!-- Add more sections as needed for additional user information -->
 
 </body>

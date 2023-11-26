@@ -1,4 +1,4 @@
-<!-- booksearch/templates/booksearch/checkout_confirmation.html -->
+<!-- booksearch/templates/booksearch/checkin_confirmation.html -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -19,5 +19,8 @@
         </li>
     </ul>
     {% endfor %}
+    <form method="get" action="{% url 'loan_search' %}">
+        <button type="submit">Return to Librarian Menu</button>
+    </form>
 </body>
 </html>
