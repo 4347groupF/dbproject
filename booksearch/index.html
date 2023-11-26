@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Search</title>
+    <style>
+        /* Centering styles */
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh; /* 100% of the viewport height */
+            margin: 0;
+        }
+
+        /* Additional styles for form and input */
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        input[type="text"] {
+            width: 200%;
+            max-width: 1000px; /* Adjust as needed */
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        button[type="submit"] {
+            padding: 10px 20px;
+            background-color: #007bff; /* Adjust as needed */
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Styles for the top navigation bar */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 0;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav li {
+            margin: 0;
+            padding: 0;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+        }
+
+        /* Styles for the header */
+        h1 {
+            margin-top: 70px; /* Adjust as needed */
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{% url 'login_page' %}"> Return to Login</a></li>
+            <li>User ID: {{ request.session.borrower_id }}</li>
+            <li><a href="{% url 'profile_page' %}">Profile</a></li>
+        </ul>
+    </nav>
+    <h1>Book Search</h1>
+    <form method="get" action="{% url 'search_books' %}">
+        <input type="text" name="q" placeholder="Enter book title or author or isbn">
+        <button type="submit">Search</button>
+    </form>
+</body>
+</html>

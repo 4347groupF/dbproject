@@ -1,0 +1,31 @@
+<!-- booksearch/templates/booksearch/checkout_confirmation.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout Confirmation</title>
+</head>
+<body>
+    <h1>Checkout Confirmation</h1>
+    <p>You have successfully checked out the following book:</p>
+    <p>Due Date: {{ due_date }} </p>
+
+    <ul>
+        <li>
+            ISBN: {{ book.isbn }}<br>
+            Title: {{ book.title }}<br>
+            Pages: {{ book.pages }}<br>
+            Author: {{ book.auth_list }}<br>
+            <!-- Add any other book details you want to display -->
+        </li>
+    </ul>
+
+    <p>Thank you for using our library! Please make sure to return it by the specified due date.</p>
+
+    <form method="get" action="{% url 'index' %}">
+        <button type="submit">Return to Book Search</button>
+    </form>
+</body>
+</html>
