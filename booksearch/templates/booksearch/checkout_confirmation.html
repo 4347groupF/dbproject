@@ -6,21 +6,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout Confirmation</title>
+
+    <style>
+        body {
+            background-color: forestgreen;
+        }
+        h1 {
+            color: white;
+            font-size: 40px;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        }
+        h2 {
+            color:red;
+            font-size: 24px;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+            font-style: oblique;
+        }
+        p {
+            color:cornsilk;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        }
+        li {
+            color:cornsilk;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        }
+    </style>
 </head>
 <body>
-    <h1>Checkout Confirmation</h1>
+    <h1><img src="/booksearch/templates/booksearch/Success.png" style="float:right">Checkout Confirmed</h1>
     <p>You have successfully checked out the following book:</p>
-    <p>Due Date: {{ due_date }} </p>
-
     <ul>
         <li>
-            ISBN: {{ book.isbn }}<br>
             Title: {{ book.title }}<br>
-            Pages: {{ book.pages }}<br>
             Author: {{ book.auth_list }}<br>
-            <!-- Add any other book details you want to display -->
+            ISBN: {{ book.isbn }}<br>
+            Pages: {{ book.pages }}<br><br>
         </li>
     </ul>
+
+    <h2>Due Date: {{ due_date }} </h2>
 
     <p>Thank you for using our library! Please make sure to return it by the specified due date.</p>
 </body>
