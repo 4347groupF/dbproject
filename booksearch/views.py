@@ -1,5 +1,4 @@
 from datetime import datetime
-
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.db import connection
@@ -46,48 +45,62 @@ def search_books(request):
 
 # TODO convert or connect with another function that will render the page
 # Currently just returns the JSON response
-def loan_search(request):
+def loans(request):
     if request.method == 'GET':
         keyword = request.GET.get('q', '') 
-
         loans = []
-        for p in BookLoans.objects.raw(
-            f"""SELECT first_name, last_name, loan_id, b.card_id, date_out, due_date
-            FROM BOOK_LOANS as bl
-            INNER JOIN BORROWERS as b
-            ON bl.card_id = b.card_id
-            WHERE first_name LIKE %(search)s OR last_name LIKE %(search)s OR isbn LIKE %(search)s or b.card_id LIKE %(search)s""",
-            {"search": f"%{keyword}%"}
-        ):
-            loans.append({
-                'loan_id': p.loan_id,
-                'first_name': p.first_name,
-                'last_name': p.last_name,
-                'card_id': p.card_id,
-                'date_out': p.date_out,
-                'due_date': p.due_date,
-            })
+        if keyword:
+            for p in BookLoans.objects.raw(
+                f"""SELECT isbn, first_name, last_name, loan_id, b.card_id, date_out, due_date
+                FROM BOOK_LOANS as bl
+                INNER JOIN BORROWERS as b
+                ON bl.card_id = b.card_id
+                WHERE first_name LIKE %(search)s OR last_name LIKE %(search)s OR isbn LIKE %(search)s or b.card_id LIKE %(search)s""",
+                {"search": f"%{keyword}%"}
+            ):
+                loans.append({
+                    'loan_id': p.loan_id,
+                    'first_name': p.first_name,
+                    'last_name': p.last_name,
+                    'card_id': p.card_id,
+                    'date_out': p.date_out,
+                    'due_date': p.due_date,
+                    'book_cover': p.isbn.cover,
+                    'auth_list': p.isbn.auth_list,
+                    'title': p.isbn.title,
+                    'isbn': p.isbn.isbn
+                })
             
         context = {
             'query': keyword,
             'loans': loans,
         }
-        return JsonResponse(context)
+        return render(request, 'booksearch/view_loans.html', context)
+    elif request.method == 'POST':
+        loan_list = request.POST.getlist('boxes')
 
-# TODO display confirmation page
-def checkin(request, isbn):
-    try:
-        book = Book.objects.get(isbn=isbn)
-        book.available = 0
+        checked_in = []
+        for lid in loan_list:
+            loan = BookLoans.objects.get(loan_id=lid)
+            loan.date_in = datetime.now().date()
+            loan.save()
 
-        loan = BookLoans.objects.get(isbn=isbn, date_in=None)
-        loan.date_in = datetime.today().date()
+            loan.isbn.available = 1
+            loan.isbn.save()
 
-        book.save()
-        loan.save()
-    except Book.DoesNotExist:
-        # TODO show error response
-        ...
+            checked_in.append({
+                'isbn': loan.isbn.isbn,
+                'book_cover': loan.isbn.cover,
+                'auth_list': loan.isbn.auth_list,
+                'title': loan.isbn.title,
+            })
+
+        context = {
+            'books': checked_in,
+        }
+        return render(request, 'booksearch/checkin_confirmation.html', context)
+
+
 
 def checkout(request, isbn):
     try:
@@ -126,7 +139,7 @@ def checkout(request, isbn):
     except Book.DoesNotExist:
         # Handle the case where the book with the given ISBN is not found
         return render(request, 'booksearch/checkout_confirmation.html', {'isbn': isbn})
-    
+
 def signup(request):
     if request.method == "POST":
         form = SignUpForm(request.POST)
@@ -148,6 +161,7 @@ def signup(request):
     else:
         form = SignUpForm()
     return render(request, "booksearch/signup.html", {"form": form})
+
 
 def login_page(request):
     return render(request, "booksearch/login.html", {})
@@ -179,3 +193,44 @@ def login_validation(request):
             return render(request, 'login.html', {'error_message': 'Database error'})
 
     return render(request, 'login.html')
+
+def profile_page(request):
+    card_id = request.session.get('borrower_id')
+    if card_id:
+        user = Borrower.objects.get(card_id=card_id)
+        book_loans = BookLoans.objects.filter(card_id=card_id)
+        
+        # Query the 'BORROWERS' table to retrieve user information
+        borrower_info = Borrower.objects.get(card_id=card_id)
+        
+        fines = []
+        total_fines = 0
+        
+        for loan in book_loans:
+            fine = Fine_management.objects.filter(loan_id=loan.loan_id).first()
+            if fine:
+                fine_amt = fine.fine_amt
+                fines.append(fine_amt)
+                total_fines += fine_amt
+            else:
+                fines.append(0)
+
+        context = {
+            'user_data': {
+                'borrower_id': user.card_id,
+                'fines': fines,
+                'total_fines': total_fines,
+                'checked_out_books': book_loans,
+                'ssn': borrower_info.ssn,
+                'address': borrower_info.address,
+                'phone': borrower_info.phone,
+                'first_name': borrower_info.first_name,
+                'last_name': borrower_info.last_name,
+                'email': borrower_info.email,
+                'city': borrower_info.city,
+                'state': borrower_info.state,
+            }
+        }
+
+        return render(request, 'booksearch/profile.html', context)
+    return render(request, 'booksearch/login.html')

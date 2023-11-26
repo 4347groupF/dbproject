@@ -52,3 +52,15 @@ class BookLoans(models.Model):
     
     def __str__(self):
         return str(self.loan_id)
+    
+class Fine_management(models.Model):
+    loan_id = models.ForeignKey(BookLoans, models.DO_NOTHING, db_column='loan_id', primary_key=True)
+    fine_amt = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    paid = models.BooleanField(default=False)
+
+    class Meta:
+        managed = False
+        db_table = 'FINES'
+
+    def __str__(self):
+        return str(self.loan_id.loan_id)

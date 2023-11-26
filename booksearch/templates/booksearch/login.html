@@ -78,7 +78,12 @@
             <input type="text" id="card_id" name="card_id" placeholder="Enter your Card ID" required>
             <button type="submit">Login</button>
         </form>
-        
+        <form method="get" action="{% url 'signup_page' %}">
+            <button type="submit">SignUp</button>
+        </form>
+        <form method="get" action="{% url 'loan_search' %}">
+            <button type="submit">Librarian Menu</button>
+        </form>
         <h3 id="rejection">{{ error_message }}</h3>
     </div>
 
