@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Search Results</title>
     <script src="{% static 'booksearch/menu.js' %}"></script>
+    
     <style>
         .text {
             display: block;
@@ -103,6 +104,48 @@
         #menu-list a:hover {
         background-color: #f4f4f4;
         }
+
+        /* Style the custom checkbox container */
+        .custom-checkbox {
+            position: relative;
+            width: 20px; /* Adjust the size as needed */
+            height: 20px; /* Adjust the size as needed */
+            background-color: #fff; /* Default background color */
+            border: 1px solid #ccc; /* Default border color */
+            cursor: pointer;
+        }
+
+        /* Style the custom checkbox when it's checked */
+        .custom-checkbox.checked {
+            background-color: #007bff; /* Custom background color for checked */
+            border: 1px solid #007bff; /* Custom border color for checked */
+        }
+
+        /* Style the checkmark (inside the checkbox) */
+        .custom-checkbox::before {
+            content: "\2713"; /* Checkmark symbol (✔) */
+            font-size: 16px; /* Adjust size as needed */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff; /* Checkmark color for checked */
+            display: none; /* Initially hidden */
+        }
+
+        /* Style the checkmark when the checkbox is checked */
+        .custom-checkbox.checked::before {
+            display: block; /* Show the checkmark when checked */
+        }
+        /* Add this to your existing CSS styles */
+        .checkbox-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%; /* Make sure the container takes the full height of the cell */
+        }
+
+        
     </style>
 </head>
 <body>
@@ -142,7 +185,6 @@
                     <td>{{ loan.date_out }}</td>
                     <td>{{ loan.due_date }}</td>
                     <td>
-                        <img src="{{ loan.cover }}" alt="Book Cover">
                         <span class="text">
                             TITLE: {{ loan.title }}
                         </span>
@@ -150,10 +192,11 @@
                         <br> ISBN: {{ loan.isbn }}
                     </td>
                     <td>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value={{loan.loan_id}} name="boxes">
+                        <div class="checkbox-container">
+                            <div class="custom-checkbox" data-value="{{ loan.loan_id }}"></div>
                         </div>
                     </td>
+                    
                 </tr>
             {% empty %}
                 <tr>
@@ -162,6 +205,50 @@
             {% endfor %}
         </tbody>
     </table>
+    <!-- Add this script at the bottom of your view_loans.html file -->
+    <script>
+        // Function to handle custom checkbox click event
+        function toggleCustomCheckbox(checkbox) {
+            checkbox.classList.toggle('checked'); // Toggle the checked class
+            const value = checkbox.getAttribute('data-value');
+            // You can add more JavaScript logic here as needed
+
+            // Example: Store the checkbox value in an array
+            if (checkbox.classList.contains('checked')) {
+                // Checkbox is checked, add its value to the array
+                selectedValues.push(value);
+            } else {
+                // Checkbox is unchecked, remove its value from the array
+                const index = selectedValues.indexOf(value);
+                if (index !== -1) {
+                    selectedValues.splice(index, 1);
+                }
+            }
+
+            // You can perform additional actions based on checkbox state
+        }
+
+        // Array to store selected checkbox values
+        const selectedValues = [];
+
+        // Attach click event handlers to custom checkboxes
+        document.querySelectorAll('.custom-checkbox').forEach(function (checkbox) {
+            checkbox.addEventListener('click', function () {
+                toggleCustomCheckbox(this);
+            });
+        });
+
+        // Function to handle form submission
+        function submitForm() {
+            // You can access the selected checkbox values in the 'selectedValues' array
+            console.log(selectedValues);
+
+            // Here, you can perform additional actions or submit the form
+            // For example, you can use AJAX to send the selected values to the server
+            // and update the database accordingly
+        }
+    </script>
+
 </form>
 </body>
 </html>
