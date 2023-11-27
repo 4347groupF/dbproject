@@ -1,11 +1,12 @@
 <!-- booksearch/templates/booksearch/book_list.html -->
-
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Search Results</title>
+    <script src="{% static 'booksearch/menu.js' %}"></script>
     <style>
         .text {
             display: block;
@@ -51,6 +52,15 @@
     </style>
 </head>
 <body>
+    <div id="menu-icon">☰MENU</div>
+    <div id="menu-list">
+        <a href="{% url 'login_page' %}">Log In</a>
+        <a href="{% url 'signup_page' %}">Sign Up</a>
+        <a href="{% url 'loan_search' %}">Librarian Menu</a>
+        <a href="{% url 'index' %}">Book Search</a>
+        <a href="{% url 'profile_page' %}">Profile</a>
+    <!-- Your menu items go here -->
+    </div>
     <h1>Search Loans</h1>
     <form method="get" action="{% url 'loan_search' %}">
         <input type="text" name="q" placeholder="Enter Book ISBN, Card Number, or First / Last Name">
@@ -80,9 +90,9 @@
                     <td>
                         <img src="{{ loan.cover }}" alt="Book Cover">
                         <span class="text">
-                            {{ loan.title }}
+                            TITLE: {{ loan.title }}
                         </span>
-                        {{ loan.auth_list }}
+                        AUTHOR: {{ loan.auth_list }}
                         <br> ISBN: {{ loan.isbn }}
                     </td>
                     <td>
@@ -98,9 +108,6 @@
             {% endfor %}
         </tbody>
     </table>
-</form>
-<form method="get" action="{% url 'login_page' %}">
-    <button type="submit">Back to Login</button>
 </form>
 </body>
 </html>
