@@ -14,5 +14,6 @@ urlpatterns = [
     path('fines/', views.fines, name='fines'),
     path('update_fines/', views.update_fines, name='update_fines'),
     path('profile/',views.profile_page, name='profile_page'),
+    path('checkout/', views.checkout_redirect, name='checkout_redirect'),
     path('checkout/<str:isbn>/', views.checkout, name='checkout'),
 ]

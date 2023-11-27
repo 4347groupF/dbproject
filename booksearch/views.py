@@ -153,6 +153,11 @@ def update_fines(request):
             """)
     return redirect('fines')
 
+def checkout_redirect(request):
+    if request.method == "GET":
+        isbn = request.GET.get('isbn', '')
+        return checkout(request, isbn)
+
 def checkout(request, isbn):
     try:
         book = Book.objects.get(isbn=isbn)
@@ -189,7 +194,10 @@ def checkout(request, isbn):
         return render(request, 'booksearch/checkout_confirmation.html', context)
     except Book.DoesNotExist:
         # Handle the case where the book with the given ISBN is not found
-        return render(request, 'booksearch/checkout_confirmation.html', {'isbn': isbn})
+        e = {
+           "error_message": f"No book was found with ISBN {isbn}"
+        }
+        return render(request, 'booksearch/checkout_failure.html', e)
 
 def signup(request):
     if request.method == "POST":

@@ -186,7 +186,7 @@
         </div>
     </form>
     <h3>Direct Checkout</h3>
-    <form method="get" action="{% url 'checkout' 'placeholder_isbn' %}">
+    <form method="get" action="{% url 'checkout_redirect' %}">
         <div class="input-group">
             <input type="text" name="isbn" placeholder="Enter ISBN for direct checkout">
             <button type="submit" class="search-button">Checkout</button>
