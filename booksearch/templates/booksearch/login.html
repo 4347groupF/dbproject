@@ -163,16 +163,14 @@
         #menu-list a:hover {
         background-color: #f4f4f4;
         }
-
-
-
     </style>
 </head>
 <body id="body">
     <div id="menu-icon">☰</div>
     <div id="menu-list">
         <a href="{% url 'signup_page' %}">Sign Up</a>
-        <a href="{% url 'loan_search' %}">Librarian Menu</a>
+        <a href="{% url 'loan_search' %}">Book Check-in</a>
+        <a href="{% url 'fines' %}">Fines</a>
     <!-- Your menu items go here -->
     </div>
     <div class="login">
@@ -185,8 +183,8 @@
             </div>
         </form>
         <div style="text-align: right;">
-            <br><p style="font-size: 12px;">Don't have an account? <a href="{% url 'signup_page' %}">SignUp</a></p>
-            <p style="font-size: 12px;">Employee? <a href="{% url 'loan_search' %}">Librarian Menu</a></p>
+            <br><p style="font-size: 12px;">Don't have an account? <a href="{% url 'signup_page' %}">Sign Up</a></p>
+            <p style="font-size: 12px;">Employee? <a href="{% url 'loan_search' %}">Check-in Books</a> or <a href="{% url 'fines' %}">Manage Fines</a></p>
         </div>
         
     </div>

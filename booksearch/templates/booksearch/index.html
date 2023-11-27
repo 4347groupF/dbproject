@@ -173,7 +173,8 @@
     <div id="menu-list">
         <a href="{% url 'login_page' %}">Log In</a>
         <a href="{% url 'signup_page' %}">Sign Up</a>
-        <a href="{% url 'loan_search' %}">Librarian Menu</a>
+        <a href="{% url 'loan_search' %}">Book Check-in</a>
+        <a href="{% url 'fines' %}">Fines</a>
         <a href="{% url 'index' %}">Book Search</a>
         <a href="{% url 'profile_page' %}">Profile</a>
     <!-- Your menu items go here -->
@@ -184,12 +185,11 @@
             <button type="submit" class="search-button">Search</button>
         </div>
     </form>
-    <p><br></p>
-
+    <h3>Direct Checkout</h3>
     <form method="get" action="{% url 'checkout' 'placeholder_isbn' %}">
         <div class="input-group">
-            <input type="text" name="q" placeholder="Enter ISBN for direct checkout">
-            <button type="submit" class="search-button">Search</button>
+            <input type="text" name="isbn" placeholder="Enter ISBN for direct checkout">
+            <button type="submit" class="search-button">Checkout</button>
         </div>
     </form>
 </body>

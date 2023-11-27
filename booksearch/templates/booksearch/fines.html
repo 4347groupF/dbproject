@@ -1,11 +1,11 @@
-<!-- booksearch/templates/booksearch/book_list.html -->
-
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Search Results</title>
+    <script src="{% static 'booksearch/menu.js' %}"></script>
     <style>
         .text {
             display: block;
@@ -26,9 +26,73 @@
         tr:nth-child(even) {
             background-color: #f2f2f2;
         }
+        #menu-icon {
+        position: absolute;
+        top: 20px; /* Adjust the top position as needed */
+        right: 10px; /* Adjust the right position as needed */
+        font-size: 20px; /* Adjust the font size as needed */
+        cursor: pointer;
+        background-color: white; /* Add a white background color */
+        padding: 8px; /* Add padding to create a rectangular shape */
+        border-radius: 4px; /* Add border-radius for rounded corners */
+        border: 1px solid #ccc;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        font-family: Arial, sans-serif;
+        }
+
+
+        /* Style for the menu list */
+        #menu-list {
+        position: fixed;
+        top: 10px; /* Adjust the top value as needed */
+        right: 10px; /* Adjust the right value as needed */
+        background-color: #fff;
+        border-radius: 4px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        display: none;
+        font-family: Arial, sans-serif;
+        }
+
+        /* Style for individual menu items */
+        /* Style for the menu list */
+        #menu-list {
+        display: none;
+        position: absolute;
+        top: 0; /* Adjust this if needed */
+        right: 0; /* Adjust this if needed */
+        background-color: #ffffff;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        z-index: 1;
+        padding: 10px;
+        min-width: 150px; /* Adjust this to your desired width */
+        }
+
+        /* Style for individual menu items (links) */
+        #menu-list a {
+        display: block;
+        padding: 10px;
+        text-decoration: none;
+        color: #333;
+        }
+
+        #menu-list a:hover {
+        background-color: #f4f4f4;
+        }
     </style>
 </head>
 <body>
+    <div id="menu-icon">☰MENU</div>
+    <div id="menu-list">
+        <a href="{% url 'login_page' %}">Log In</a>
+        <a href="{% url 'signup_page' %}">Sign Up</a>
+        <a href="{% url 'loan_search' %}">Book Check-in</a>
+        <a href="{% url 'fines' %}">Fines</a>
+        <a href="{% url 'index' %}">Book Search</a>
+        <a href="{% url 'profile_page' %}">Profile</a>
+    <!-- Your menu items go here -->
+    </div>
     <h1>Fine Management</h1>
     <a href='{% url 'update_fines' %}'><button>Update Fines</button></a>
 <form method="POST">
@@ -63,6 +127,5 @@
         </tbody>
     </table>
 </form>
-
 </body>
 </html>
