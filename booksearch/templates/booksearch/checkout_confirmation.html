@@ -1,31 +1,118 @@
 <!-- booksearch/templates/booksearch/checkout_confirmation.html -->
-
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout Confirmation</title>
+    <script src="{% static 'booksearch/menu.js' %}"></script>
+    <style>
+        body {
+            background-color: forestgreen;
+        }
+        h1 {
+            color: white;
+            font-size: 40px;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        }
+        h2 {
+            color:red;
+            font-size: 24px;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+            font-style: oblique;
+        }
+        p {
+            color:cornsilk;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        }
+        li {
+            color:cornsilk;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        }
+        #menu-icon {
+        position: absolute;
+        top: 20px; /* Adjust the top position as needed */
+        right: 10px; /* Adjust the right position as needed */
+        font-size: 20px; /* Adjust the font size as needed */
+        cursor: pointer;
+        background-color: white; /* Add a white background color */
+        padding: 8px; /* Add padding to create a rectangular shape */
+        border-radius: 4px; /* Add border-radius for rounded corners */
+        border: 1px solid #ccc;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        font-family: Arial, sans-serif;
+        }
+
+
+        /* Style for the menu list */
+        #menu-list {
+        position: fixed;
+        top: 10px; /* Adjust the top value as needed */
+        right: 10px; /* Adjust the right value as needed */
+        background-color: #fff;
+        border-radius: 4px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        display: none;
+        font-family: Arial, sans-serif;
+        }
+
+        /* Style for individual menu items */
+        /* Style for the menu list */
+        #menu-list {
+        display: none;
+        position: absolute;
+        top: 0; /* Adjust this if needed */
+        right: 0; /* Adjust this if needed */
+        background-color: #ffffff;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        z-index: 1;
+        padding: 10px;
+        min-width: 150px; /* Adjust this to your desired width */
+        }
+
+        /* Style for individual menu items (links) */
+        #menu-list a {
+        display: block;
+        padding: 10px;
+        text-decoration: none;
+        color: #333;
+        }
+
+        #menu-list a:hover {
+        background-color: #f4f4f4;
+        }
+    </style>
 </head>
 <body>
-    <h1>Checkout Confirmation</h1>
+    <div id="menu-icon">☰MENU</div>
+    <div id="menu-list">
+        <a href="{% url 'login_page' %}">Log In</a>
+        <a href="{% url 'signup_page' %}">Sign Up</a>
+        <a href="{% url 'loan_search' %}">Librarian Menu</a>
+        <a href="{% url 'index' %}">Book Search</a>
+        <a href="{% url 'profile_page' %}">Profile</a>
+    <!-- Your menu items go here -->
+    </div>
+    <h1><img src="{% static 'booksearch/Success.png' %}" style="float:right">Checkout Confirmed</h1>
     <p>You have successfully checked out the following book:</p>
-    <p>Due Date: {{ due_date }} </p>
-
     <ul>
         <li>
-            ISBN: {{ book.isbn }}<br>
             Title: {{ book.title }}<br>
-            Pages: {{ book.pages }}<br>
             Author: {{ book.auth_list }}<br>
-            <!-- Add any other book details you want to display -->
+            ISBN: {{ book.isbn }}<br>
+            Pages: {{ book.pages }}<br><br>
         </li>
     </ul>
+
+    <h2>Due Date: {{ due_date }} </h2>
 
     <p>Thank you for using our library! Please make sure to return it by the specified due date.</p>
 
     <form method="get" action="{% url 'index' %}">
-        <button type="submit">Return to Home</button>
+        <button type="submit">Return to Book Search</button>
     </form>
 </body>
 </html>

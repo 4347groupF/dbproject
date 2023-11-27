@@ -23,29 +23,50 @@
     }
     .form-group {
       margin-bottom: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
     .form-group label {
-      display: block;
-      margin-bottom: 5px;
+      flex: 1;
+      margin-right: 10px;
     }
     .form-group input {
-      width: 100%;
+      flex: 2;
       padding: 8px;
       font-size: 16px;
       border-radius: 4px;
       border: 1px solid #ccc;
     }
-    .form-group button {
-      padding: 8px 12px;
+    .button-group {
+      display: flex;
+      justify-content: space-between; /* Align buttons horizontally */
+    }
+    .back-button {
+      flex: 1; /* Equal width for both buttons */
+      padding: 4px 6px;
       font-size: 16px;
       border-radius: 4px;
       border: none;
-      background-color: #007bff;
+      background-color: #3f3f3f; /* Blue color */
       color: #fff;
       cursor: pointer;
     }
-    .form-group button:hover {
-      background-color: #0056b3;
+    .signup-button {
+      flex: 1; /* Equal width for both buttons */
+      padding: 4px 6px;
+      font-size: 16px;
+      border-radius: 4px;
+      border: none;
+      background-color: #28a745; /* Green color */
+      color: #fff;
+      cursor: pointer;
+    }
+    .back-button:hover {
+      background-color: #323539; /* Darker blue on hover */
+    }
+    .signup-button:hover {
+      background-color: #1e7e34; /* Darker green on hover */
     }
   </style>
 </head>
@@ -55,12 +76,17 @@
     <form method="post">
       {% csrf_token %}
       {% for field in form %}
-        <div class="fieldWrapper">
+        <div class="form-group">
           {{ field.errors }}
-          {{ field.label_tag }} {{ field }}
+          {{ field.label_tag }}
+          {{ field }}
         </div>
       {% endfor %}
-      <input type="submit" value="Submit">
+      <div class="button-group">
+        <button type="button" onclick="location.href='{% url 'login_page' %}'" class="back-button">Back</button>
+        &nbsp;
+        <button type="submit" class="signup-button">Sign Up</button>
+      </div>
     </form>
   </div>
 </body>

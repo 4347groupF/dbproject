@@ -61,4 +61,6 @@ class Fines(models.Model):
     class Meta:
         managed = False
         db_table = 'FINES'
-        
+
+    def __str__(self):
+        return str(self.loan.loan_id)

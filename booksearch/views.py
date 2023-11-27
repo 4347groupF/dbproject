@@ -1,5 +1,4 @@
 from datetime import datetime
-
 from django.shortcuts import render, redirect
 from django.db import connection
 from django.db.models import Sum
@@ -191,7 +190,7 @@ def checkout(request, isbn):
     except Book.DoesNotExist:
         # Handle the case where the book with the given ISBN is not found
         return render(request, 'booksearch/checkout_confirmation.html', {'isbn': isbn})
-    
+
 def signup(request):
     if request.method == "POST":
         form = SignUpForm(request.POST)
@@ -213,6 +212,7 @@ def signup(request):
     else:
         form = SignUpForm()
     return render(request, "booksearch/signup.html", {"form": form})
+
 
 def login_page(request):
     return render(request, "booksearch/login.html", {})
@@ -250,12 +250,38 @@ def profile_page(request):
     if card_id:
         user = Borrower.objects.get(card_id=card_id)
         book_loans = BookLoans.objects.filter(card_id=card_id)
+        
+        # Query the 'BORROWERS' table to retrieve user information
+        borrower_info = Borrower.objects.get(card_id=card_id)
+        
+        fines = []
+        total_fines = 0
+        
+        for loan in book_loans:
+            fine = Fines.objects.filter(loan=loan).first()
+            if fine:
+                fine_amt = fine.fine_amt
+                fines.append(fine_amt)
+                total_fines += fine_amt
+            else:
+                fines.append(0)
+
         context = {
             'user_data': {
                 'borrower_id': user.card_id,
-                'fines': [],
+                'fines': fines,
+                'total_fines': total_fines,
                 'checked_out_books': book_loans,
+                'ssn': borrower_info.ssn,
+                'address': borrower_info.address,
+                'phone': borrower_info.phone,
+                'first_name': borrower_info.first_name,
+                'last_name': borrower_info.last_name,
+                'email': borrower_info.email,
+                'city': borrower_info.city,
+                'state': borrower_info.state,
             }
         }
+
         return render(request, 'booksearch/profile.html', context)
     return render(request, 'booksearch/login.html')
