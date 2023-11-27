@@ -11,7 +11,8 @@ urlpatterns = [
     path('index/', views.home, name='index'),
     path('search/', views.search_books, name='search_books'),  
     path('loans/', views.loans, name='loan_search'),
-    # Define a URL pattern for the 'checkout' view
+    path('fines/', views.fines, name='fines'),
+    path('update_fines/', views.update_fines, name='update_fines'),
     path('profile/',views.profile_page, name='profile_page'),
     path('checkout/<str:isbn>/', views.checkout, name='checkout'),
 ]

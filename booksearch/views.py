@@ -1,8 +1,8 @@
 from datetime import datetime
 
 from django.shortcuts import render, redirect
-from django.http import JsonResponse
 from django.db import connection
+from django.db.models import Sum
 from .models import *
 from .forms import *
 
@@ -98,6 +98,61 @@ def loans(request):
             'books': checked_in,
         }
         return render(request, 'booksearch/checkin_confirmation.html', context)
+
+def fines(request):
+    if request.method == "POST":
+        user_list = request.POST.getlist('boxes')
+
+        paid_fines = []
+        for cid in user_list:
+            borrower = Borrower.objects.get(card_id=cid)
+            fines = Fines.objects.filter(loan_id__card=borrower, paid=0, loan_id__date_in__isnull=False)
+            total = fines.aggregate(Sum('fine_amt'))['fine_amt__sum']
+            for fine in fines:
+                fine.paid = 1
+                fine.save()
+
+            paid_fines.append({
+                'amt_paid': total,
+                'first_name': borrower.first_name,
+                'last_name': borrower.last_name
+            })
+
+        context = {
+            'borrowers': paid_fines,
+        }
+        return render(request, 'booksearch/fine_payment_confirmation.html', context)
+    else:
+        fines = Fines.objects.filter(paid=0, loan_id__date_in__isnull=False).values(
+            'loan_id__card__card_id', 
+            'loan_id__card__first_name', 
+            'loan_id__card__last_name'
+        ).order_by('loan_id__card__card_id').annotate(total=Sum('fine_amt'))
+
+        context = {
+            "fines": fines
+        }
+    return render(request, "booksearch/fines.html", context)
+
+def update_fines(request):
+    with connection.cursor() as cursor:
+        cursor.execute(
+            """INSERT INTO FINES (loan_id, fine_amt)
+            SELECT loan_id, 0.25 * DATEDIFF(date_in, due_date) as fine
+            FROM BOOK_LOANS 
+            WHERE date_in > due_date
+            ON DUPLICATE KEY UPDATE
+            fine_amt = IF(paid=0, 0.25 * DATEDIFF(date_in, due_date), fine_amt);
+            """)
+        cursor.execute("""
+            INSERT INTO FINES (loan_id, fine_amt)
+            SELECT loan_id, 0.25 * DATEDIFF(CURDATE(), due_date) as fine
+            FROM BOOK_LOANS 
+            WHERE date_in IS NULL AND CURDATE() > due_date
+            ON DUPLICATE KEY UPDATE
+            fine_amt = IF(paid=0, 0.25 * DATEDIFF(CURDATE(), due_date), fine_amt);
+            """)
+    return redirect('fines')
 
 def checkout(request, isbn):
     try:

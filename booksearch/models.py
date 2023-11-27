@@ -52,3 +52,13 @@ class BookLoans(models.Model):
     
     def __str__(self):
         return str(self.loan_id)
+    
+class Fines(models.Model):
+    loan = models.OneToOneField(BookLoans, models.DO_NOTHING, primary_key=True)
+    fine_amt = models.DecimalField(max_digits=4, decimal_places=2, blank=True, null=True)
+    paid = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'FINES'
+        

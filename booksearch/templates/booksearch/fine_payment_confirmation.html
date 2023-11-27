@@ -1,0 +1,22 @@
+<!-- booksearch/templates/booksearch/checkout_confirmation.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fine Confirmation</title>
+</head>
+<body>
+    <h1>Fine Clear Confirmation</h1>
+    <p>The following fines have been cleared:</p>
+    {% for fine in borrowers %}
+    <ul>
+        <li>
+            Name: {{ fine.first_name }} {{ fine.last_name }}<br>
+            Amount Paid: {{ fine.amt_paid }}<br>
+        </li>
+    </ul>
+    {% endfor %}
+</body>
+</html>

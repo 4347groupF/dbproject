@@ -1,0 +1,68 @@
+<!-- booksearch/templates/booksearch/book_list.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Search Results</title>
+    <style>
+        .text {
+            display: block;
+            width: 400px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Fine Management</h1>
+    <a href='{% url 'update_fines' %}'><button>Update Fines</button></a>
+<form method="POST">
+    {% csrf_token %}
+    <button type="submit">Clear Paid Fines</button>
+    <table>
+        <thead>
+            <tr>
+                <th>Card ID</th>
+                <th>Borrower</th>
+                <th>Fine Amount Due</th>
+                <th>Select</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for fine in fines %}
+                <tr>
+                    <td>{{ fine.loan_id__card__card_id }}</td>
+                    <td>{{ fine.loan_id__card__first_name }} {{ fine.loan_id__card__last_name }}</td>
+                    <td>{{ fine.total }}</td>
+                    <td>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value={{fine.loan_id__card__card_id}} name="boxes">
+                        </div>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6">No loans found.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</form>
+
+</body>
+</html>
