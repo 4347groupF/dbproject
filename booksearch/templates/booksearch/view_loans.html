@@ -26,59 +26,27 @@
         tr:nth-child(even) {
             background-color: #f2f2f2;
         }
-        #menu-icon {
-        position: absolute;
-        top: 20px; /* Adjust the top position as needed */
-        right: 10px; /* Adjust the right position as needed */
-        font-size: 20px; /* Adjust the font size as needed */
-        cursor: pointer;
-        background-color: white; /* Add a white background color */
-        padding: 8px; /* Add padding to create a rectangular shape */
-        border-radius: 4px; /* Add border-radius for rounded corners */
-        border: 1px solid #ccc;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        font-family: Arial, sans-serif;
+
+        input {
+            width: 500px;
+            padding: 6px 8px;
+            margin: 4px 0;
+            border-radius: 4px;
+            background-color: whitesmoke;
+
+            /*None of these work*/            
+            margin-left: auto;
+            margin-right: auto;
         }
 
-
-        /* Style for the menu list */
-        #menu-list {
-        position: fixed;
-        top: 10px; /* Adjust the top value as needed */
-        right: 10px; /* Adjust the right value as needed */
-        background-color: #fff;
-        border-radius: 4px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        display: none;
-        font-family: Arial, sans-serif;
-        }
-
-        /* Style for individual menu items */
-        /* Style for the menu list */
-        #menu-list {
-        display: none;
-        position: absolute;
-        top: 0; /* Adjust this if needed */
-        right: 0; /* Adjust this if needed */
-        background-color: #ffffff;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        z-index: 1;
-        padding: 10px;
-        min-width: 150px; /* Adjust this to your desired width */
-        }
-
-        /* Style for individual menu items (links) */
-        #menu-list a {
-        display: block;
-        padding: 10px;
-        text-decoration: none;
-        color: #333;
-        }
-
-        #menu-list a:hover {
-        background-color: #f4f4f4;
+        button {
+            background-color: green;
+            color: white;
+            border: none;
+            padding: 6px 14px;
+            margin: 4px;
+            cursor: pointer;
+            border-radius: 8px;
         }
     </style>
 </head>
