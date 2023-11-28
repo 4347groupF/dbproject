@@ -4,10 +4,9 @@ from django.core.exceptions import ValidationError
 from .models import Borrower
 
 def validate_ssn(ssn):
-    if Borrower.objects.get(ssn=ssn) is None:
-        return
-    
-    raise ValidationError("An account is already associated with this SSN.")
+    if Borrower.objects.filter(ssn=ssn).exists():
+        raise ValidationError("An account is already associated with this SSN.")
+    return
 
 class SignUpForm(forms.Form):
     first_name = forms.CharField(min_length=1, max_length=50, required=True)
