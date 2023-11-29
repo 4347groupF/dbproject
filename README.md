@@ -1,33 +1,13 @@
-Project structure tree
-
-> booksearchproject
->> booksearch
->>> static
->>>> booksearch
->>>>> any image files or .js files
->>>>> 
->>> templates
->>>> booksearch
->>>>> .html files
->>>>>
->>> urls.py, views.py, models.py, forms.py
->>>
->> booksearchproject
->>> setting.py, urls.py, etc,..
->>>
->> scripts
->>> Update Fine.sql
->>>
->> manage.py
+**Project structure tree**
 
 ![Screenshot 2023-11-28 at 10 56 51 PM](https://github.com/4347groupF/dbproject/assets/1592134/dc1ed01d-8742-42e5-80ab-e9ab95e630dd)
 
 
 <br />
-To start the server:
+To start the server: (Encouraged to do it in virtual environment)
 
-*Encouraged to do it in virtual environment.
 > source venv/bin/activate
+>
 > 
 <br />
 
