@@ -2,6 +2,9 @@ Project structure tree
 
 > booksearchproject
 >> booksearch
+>>> static
+>>>> booksearch
+>>>>> any image files or .js files
 >>> templates
 >>>> booksearch
 >>>>> .html files
