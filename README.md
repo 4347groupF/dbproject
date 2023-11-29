@@ -20,16 +20,13 @@ Project structure tree
 >>>
 >> manage.py
 
-
-
-
-
-
-
+<br />
 To start the server:
 
 *Encouraged to do it in virtual environment.
 > source venv/bin/activate
+> 
+<br />
 
 Move to directory where it has all files saved (where manage.py is located).
 > python manage.py makemigrations (compile models.py)
