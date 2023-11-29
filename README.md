@@ -20,6 +20,9 @@ Project structure tree
 >>>
 >> manage.py
 
+![Screenshot 2023-11-28 at 10 56 51 PM](https://github.com/4347groupF/dbproject/assets/1592134/dc1ed01d-8742-42e5-80ab-e9ab95e630dd)
+
+
 <br />
 To start the server:
 
