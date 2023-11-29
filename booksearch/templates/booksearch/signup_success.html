@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Checkout Limit Exceeded</title>
+  <title>Sign Up Success</title>
   <style>
     /* Basic styling */
     body {
@@ -26,5 +26,8 @@
     <h1>Thanks for signing up!</h1>
     <p>Your new library id is {{ id }}</p>
   </div>
+  <form method="get" action="{% url 'login_page' %}">
+    <button type="submit">Return</button>
+</form>
 </body>
 </html>

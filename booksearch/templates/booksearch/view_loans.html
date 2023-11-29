@@ -78,7 +78,6 @@
         font-family: Arial, sans-serif;
         }
 
-        /* Style for individual menu items */
         /* Style for the menu list */
         #menu-list {
         display: none;
@@ -91,7 +90,7 @@
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         z-index: 1;
         padding: 10px;
-        min-width: 150px; /* Adjust this to your desired width */
+        min-width: 150px;
         }
 
         /* Style for individual menu items (links) */
@@ -130,20 +129,19 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            color: #fff; /* Checkmark color for checked */
-            display: none; /* Initially hidden */
+            color: #fff; 
+            display: none; 
         }
 
         /* Style the checkmark when the checkbox is checked */
         .custom-checkbox.checked::before {
-            display: block; /* Show the checkmark when checked */
+            display: block; 
         }
-        /* Add this to your existing CSS styles */
         .checkbox-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100%; /* Make sure the container takes the full height of the cell */
+            height: 100%; 
         }
 
         
@@ -206,15 +204,12 @@
             {% endfor %}
         </tbody>
     </table>
-    <!-- Add this script at the bottom of your view_loans.html file -->
     <script>
         // Function to handle custom checkbox click event
         function toggleCustomCheckbox(checkbox) {
             checkbox.classList.toggle('checked'); // Toggle the checked class
             const value = checkbox.getAttribute('data-value');
-            // You can add more JavaScript logic here as needed
 
-            // Example: Store the checkbox value in an array
             if (checkbox.classList.contains('checked')) {
                 // Checkbox is checked, add its value to the array
                 selectedValues.push(value);
@@ -226,7 +221,6 @@
                 }
             }
 
-            // You can perform additional actions based on checkbox state
         }
 
         // Array to store selected checkbox values
@@ -241,12 +235,7 @@
 
         // Function to handle form submission
         function submitForm() {
-            // You can access the selected checkbox values in the 'selectedValues' array
             console.log(selectedValues);
-
-            // Here, you can perform additional actions or submit the form
-            // For example, you can use AJAX to send the selected values to the server
-            // and update the database accordingly
         }
     </script>
 

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+</head>
+<body>
+    <h1>ISBN Checkout</h1>
+
+    <form method="get" action="{% url 'isbn_checkout' %}">
+        <div class="input-group">
+            <input type="text" name="q" placeholder="Enter ISBN for direct checkout">
+            <button type="submit" class="search-button">Checkout</button>
+        </div>
+    </form>
+</body>
+</html>
