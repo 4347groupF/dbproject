@@ -28,11 +28,13 @@ To start the server:
 > source venv/bin/activate
 
 Move to directory where it has all files saved (where manage.py is located).
-> python manage.py makemigrations.
+> python manage.py makemigrations (compile models.py)
 > 
-> python manage.py migrate.
+> python manage.py migrate
+>
+> python manage.py collectstatic (compile static files)
 > 
-> python manage.py runserver.
+> python manage.py runserver
 
 
 https://4347groupf.github.io/dbproject/
