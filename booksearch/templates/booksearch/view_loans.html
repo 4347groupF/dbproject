@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Search Results</title>
     <script src="{% static 'booksearch/menu.js' %}"></script>
-    
     <style>
         .text {
             display: block;
@@ -49,9 +48,8 @@
             cursor: pointer;
             border-radius: 8px;
         }
-
         #menu-icon {
-        position: fixed;
+        position: absolute;
         top: 20px; /* Adjust the top position as needed */
         right: 10px; /* Adjust the right position as needed */
         font-size: 20px; /* Adjust the font size as needed */
@@ -62,14 +60,13 @@
         border: 1px solid #ccc;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         font-family: Arial, sans-serif;
-        z-index: 1000;
         }
 
 
         /* Style for the menu list */
         #menu-list {
         position: fixed;
-        top: 10px; /* Adjust the top value as needed */
+        top: 20px; /* Adjust the top value as needed */
         right: 10px; /* Adjust the right value as needed */
         background-color: #fff;
         border-radius: 4px;
@@ -90,7 +87,7 @@
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         z-index: 1;
         padding: 10px;
-        min-width: 150px;
+        min-width: 150px; 
         }
 
         /* Style for individual menu items (links) */
@@ -104,50 +101,25 @@
         #menu-list a:hover {
         background-color: #f4f4f4;
         }
-
-        /* Style the custom checkbox container */
-        .custom-checkbox {
-            position: relative;
-            width: 20px; /* Adjust the size as needed */
-            height: 20px; /* Adjust the size as needed */
-            background-color: #fff; /* Default background color */
-            border: 1px solid #ccc; /* Default border color */
-            cursor: pointer;
+        .date-display {
+        position: fixed;
+        top: 20px;
+        right: 120px;
+        background-color: white;
+        padding: 5px 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 13px;
+        font-family: Arial, sans-serif;
         }
-
-        /* Style the custom checkbox when it's checked */
-        .custom-checkbox.checked {
-            background-color: #007bff; /* Custom background color for checked */
-            border: 1px solid #007bff; /* Custom border color for checked */
-        }
-
-        /* Style the checkmark (inside the checkbox) */
-        .custom-checkbox::before {
-            content: "\2713"; /* Checkmark symbol (✔) */
-            font-size: 16px; /* Adjust size as needed */
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: #fff; 
-            display: none; 
-        }
-
-        /* Style the checkmark when the checkbox is checked */
-        .custom-checkbox.checked::before {
-            display: block; 
-        }
-        .checkbox-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100%; 
-        }
-
-        
     </style>
 </head>
 <body>
+    <div id="current-date" class="date-display">
+        {% load tz %}{% timezone "America/Chicago" %}
+        Date: {% now "Y-m-d" %} <br>Time: {% now "h:i A" %}
+        {% endtimezone %}
+    </div>
     <div id="menu-icon">☰MENU</div>
     <div id="menu-list">
         <a href="{% url 'login_page' %}">Log In</a>
@@ -161,6 +133,7 @@
     <form method="get" action="{% url 'loan_search' %}">
         <input type="text" name="q" placeholder="Enter Book ISBN, Card Number, or First / Last Name">
         <button type="submit">Search</button>
+        <button type="submit" name="show_overdue" value="true">Show Overdue</button>
     </form>
 <form method="POST">
     {% csrf_token %}
@@ -170,6 +143,7 @@
             <tr>
                 <th>Loan ID</th>
                 <th>Borrower</th>
+                <th>Card ID</th>
                 <th>Date Out</th>
                 <th>Due Date</th>
                 <th>Book</th>
@@ -181,9 +155,11 @@
                 <tr>
                     <td>{{ loan.loan_id }}</td>
                     <td>{{ loan.first_name }} {{ loan.last_name }}</td>
+                    <td>{{ loan.card_id}}</td>
                     <td>{{ loan.date_out }}</td>
                     <td>{{ loan.due_date }}</td>
                     <td>
+                        <img src="{{ loan.cover }}" alt="Book Cover">
                         <span class="text">
                             TITLE: {{ loan.title }}
                         </span>
@@ -191,11 +167,10 @@
                         <br> ISBN: {{ loan.isbn }}
                     </td>
                     <td>
-                        <div class="checkbox-container">
-                            <div class="custom-checkbox" data-value="{{ loan.loan_id }}"></div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value={{loan.loan_id}} name="boxes">
                         </div>
                     </td>
-                    
                 </tr>
             {% empty %}
                 <tr>
@@ -204,41 +179,6 @@
             {% endfor %}
         </tbody>
     </table>
-    <script>
-        // Function to handle custom checkbox click event
-        function toggleCustomCheckbox(checkbox) {
-            checkbox.classList.toggle('checked'); // Toggle the checked class
-            const value = checkbox.getAttribute('data-value');
-
-            if (checkbox.classList.contains('checked')) {
-                // Checkbox is checked, add its value to the array
-                selectedValues.push(value);
-            } else {
-                // Checkbox is unchecked, remove its value from the array
-                const index = selectedValues.indexOf(value);
-                if (index !== -1) {
-                    selectedValues.splice(index, 1);
-                }
-            }
-
-        }
-
-        // Array to store selected checkbox values
-        const selectedValues = [];
-
-        // Attach click event handlers to custom checkboxes
-        document.querySelectorAll('.custom-checkbox').forEach(function (checkbox) {
-            checkbox.addEventListener('click', function () {
-                toggleCustomCheckbox(this);
-            });
-        });
-
-        // Function to handle form submission
-        function submitForm() {
-            console.log(selectedValues);
-        }
-    </script>
-
 </form>
 </body>
 </html>

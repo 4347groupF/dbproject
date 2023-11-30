@@ -38,6 +38,17 @@
         background-color: #69bcff;
         border-radius: 8px;
         }
+        .date-display {
+        position: fixed;
+        top: 20px;
+        right: 120px;
+        background-color: white;
+        padding: 5px 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 13px;
+        font-family: Arial, sans-serif;
+        }
         #menu-icon {
         position: absolute;
         top: 20px; /* Adjust the top position as needed */
@@ -52,10 +63,11 @@
         font-family: Arial, sans-serif;
         }
 
+
         /* Style for the menu list */
         #menu-list {
         position: fixed;
-        top: 10px; /* Adjust the top value as needed */
+        top: 20px; /* Adjust the top value as needed */
         right: 10px; /* Adjust the right value as needed */
         background-color: #fff;
         border-radius: 4px;
@@ -96,6 +108,11 @@
 <body>
     <h1>User Profile</h1>
     <br>
+    <div id="current-date" class="date-display">
+        {% load tz %}{% timezone "America/Chicago" %}
+        Date: {% now "Y-m-d" %} <br>Time: {% now "h:i A" %}
+        {% endtimezone %}
+    </div>
     <div id="menu-icon">☰MENU</div>
     <div id="menu-list">
         <a href="{% url 'login_page' %}">Log In</a>

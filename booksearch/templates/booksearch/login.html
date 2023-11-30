@@ -114,14 +114,18 @@
             background-color: #0056b3;
         }
         #menu-icon {
-        position: absolute;
-        top: 10px; /* Adjust the top position as needed */
+        position: fixed;
+        top: 20px; /* Adjust the top position as needed */
         right: 10px; /* Adjust the right position as needed */
-        font-size: 24px; /* Adjust the font size as needed */
+        font-size: 20px; /* Adjust the font size as needed */
         cursor: pointer;
         background-color: white; /* Add a white background color */
         padding: 8px; /* Add padding to create a rectangular shape */
         border-radius: 4px; /* Add border-radius for rounded corners */
+        border: 1px solid #ccc;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        font-family: Arial, sans-serif;
+        z-index: 1000;
         }
 
 
@@ -134,6 +138,7 @@
         border-radius: 4px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         display: none;
+        font-family: Arial, sans-serif;
         }
 
         /* Style for the menu list */
@@ -162,10 +167,26 @@
         #menu-list a:hover {
         background-color: #f4f4f4;
         }
+        .date-display {
+        position: fixed;
+        top: 20px;
+        right: 120px;
+        background-color: white;
+        padding: 5px 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 13px;
+        font-family: Arial, sans-serif;
+        }
     </style>
 </head>
 <body id="body">
-    <div id="menu-icon">☰</div>
+    <div id="current-date" class="date-display">
+        {% load tz %}{% timezone "America/Chicago" %}
+        Date: {% now "Y-m-d" %} <br>Time: {% now "h:i A" %}
+        {% endtimezone %}
+    </div>
+    <div id="menu-icon">☰MENU</div>
     <div id="menu-list">
         <a href="{% url 'signup_page' %}">Sign Up</a>
         <a href="{% url 'loan_search' %}">Book Check-in</a>
