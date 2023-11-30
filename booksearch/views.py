@@ -46,15 +46,17 @@ def search_books(request):
 def loans(request):
     if request.method == 'GET':
         keyword = request.GET.get('q', '') 
+        show_overdue = request.GET.get('show_overdue')
         loans = []
-        if keyword:
+
+        if show_overdue == 'true':
             for p in BookLoans.objects.raw(
                 f"""SELECT isbn, first_name, last_name, loan_id, b.card_id, date_out, due_date
                 FROM BOOK_LOANS as bl
                 INNER JOIN BORROWERS as b
                 ON bl.card_id = b.card_id
-                WHERE first_name LIKE %(search)s OR last_name LIKE %(search)s OR isbn LIKE %(search)s or b.card_id LIKE %(search)s""",
-                {"search": f"%{keyword}%"}
+                WHERE due_date < CURDATE()
+                AND date_in IS NULL""",
             ):
                 loans.append({
                     'loan_id': p.loan_id,
@@ -68,7 +70,29 @@ def loans(request):
                     'title': p.isbn.title,
                     'isbn': p.isbn.isbn
                 })
-            
+        
+        elif keyword:
+            for p in BookLoans.objects.raw(
+                f"""SELECT isbn, first_name, last_name, loan_id, b.card_id, date_out, due_date
+                FROM BOOK_LOANS as bl
+                INNER JOIN BORROWERS as b
+                ON bl.card_id = b.card_id
+                WHERE (first_name LIKE %(search)s OR last_name LIKE %(search)s OR isbn LIKE %(search)s or b.card_id LIKE %(search)s)
+                AND date_in IS NULL""",
+                {"search": f"%{keyword}%"}
+            ):
+                loans.append({
+                    'loan_id': p.loan_id,
+                    'first_name': p.first_name,
+                    'last_name': p.last_name,
+                    'card_id': p.card_id,
+                    'date_out': p.date_out,
+                    'due_date': p.due_date,
+                    'book_cover': p.isbn.cover,
+                    'auth_list': p.isbn.auth_list,
+                    'title': p.isbn.title,
+                    'isbn': p.isbn.isbn
+                })  
         context = {
             'query': keyword,
             'loans': loans,
@@ -208,10 +232,10 @@ def signup(request):
                 last_name=form.cleaned_data["last_name"],
                 ssn=form.cleaned_data["ssn"],
                 phone=form.cleaned_data["phone"],
-                email=form.cleaned_data["email"],
                 address=form.cleaned_data["address"],
+                city=form.cleaned_data["city"],
                 state=form.cleaned_data["state"],
-                city=form.cleaned_data["city"]
+                email=form.cleaned_data["email"],
             )
 
             borrower.save()
