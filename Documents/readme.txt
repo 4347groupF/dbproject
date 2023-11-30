@@ -3,11 +3,14 @@ SQL Library Project
 
 1. System Requirements
 	A. Python: Latest version required, see Python Downloads at https://www.python.org/downloads/
+	B. Django: Latest version required, see Django Downloads at https://www.djangoproject.com/download/
 	B. Web Browser: Google Chrome is recommended
 
 2. Server Startup Instructions
 	A. Open command-line interface (CLI)
-	B. Activate virtual environment using:
+		a. Unix or MacOS: terminal
+		b. Windows: Command Prompt
+	B. (Optional) Activate virtual environment using:
 		a. Unix or MacOS: source venv/bin/activate
 		b. Windows: venv\Scripts\activate
 	C. Install Python if not installed from the Python website
