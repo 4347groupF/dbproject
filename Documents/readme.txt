@@ -25,7 +25,7 @@ SQL Library Project
 3. Technical Dependencies
 	A. OS Compatibility: Works on MacOS, Windows, Linux
 	B. Browser Support: Functional on Google Chrome, Internet Explorer, Safari
-	C. Database Management: No DBMS installation needed, SQL connectivity set in settings.py
+	C. Database Management: No DBMS installation needed, mySQL connectivity set in settings.py
 
 4. Version Control Repository
 	A. GitHub Repository: Visit https://github.com/4347groupF/dbproject for latest updates and repository access
