@@ -13,4 +13,5 @@ document.addEventListener("DOMContentLoaded", function () {
             menuList.style.right = "0"; // Adjust this if needed
         }
     });
+
 });
