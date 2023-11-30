@@ -1,3 +1,6 @@
+CS 4347.002 Team F
+SQL Library Project
+
 1. System Requirements
 	A. Python: Latest version required, see Python Downloads at https://www.python.org/downloads/
 	B. Web Browser: Google Chrome is recommended
